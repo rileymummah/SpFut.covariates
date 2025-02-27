@@ -7,6 +7,7 @@
 #' @param id.label (character) Column name of location ID
 #'
 #' @returns
+#' @export
 #'
 #' @examples
 #' \dontrun{

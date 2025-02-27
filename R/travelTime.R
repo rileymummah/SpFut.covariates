@@ -11,6 +11,7 @@
 #' @param method (character) Method to extract data using terra::extract(). Valid methods are "fast" and "precise"
 #'
 #' @returns A data frame with summarized travel time for each polygon in locs
+#' @export
 #'
 #' @examples
 #' \dontrun{

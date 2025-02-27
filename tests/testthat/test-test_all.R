@@ -30,7 +30,7 @@ tmp1 <- get_buffered_bbox(locs)
 # dat <- get_landcover(locs, path, id.label)
 #
 # # test elevation
-dat <- get_elevation(locs, path, id.label)
+# dat <- get_elevation(locs, path, id.label)
 #
 # # test protected areas
 # dat <- get_protected(locs, path, id.label)

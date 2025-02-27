@@ -5,6 +5,7 @@
 #' @param path (character) Path to location of data to extract
 #'
 #' @returns A list of the locations and the path
+#' @export
 #'
 #' @examples
 #' \dontrun{

@@ -1,3 +1,21 @@
+#' Protected areas
+#'
+#' @description Process US protected area data. Before running this function, you must download PADUS4_0Geodatabase.zip from https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-download. Unzip and call the path to thePADUS4_0Geodatabase folder in the get_protected() function.
+#'
+#' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
+#' @param path (character) Path to location of data to extract
+#' @param id.label (character) Column name of location ID
+#'
+#' @returns
+#' @export
+#'
+#' @examples
+#' \dontrun{
+#' data(locs)
+#'
+#' dat <- get_protected(locs, path = 'data/', id.label = 'grid.id')
+#' }
+
 get_protected <- function(locs,
                           path,
                           id.label = "id") {
