@@ -13,6 +13,9 @@ get_protected(locs, path, id.label = "id")
 
 \item{id.label}{(character) Column name of location ID}
 }
+\value{
+A data frame with summarized protected areas for each polygon in locs
+}
 \description{
 Process US protected area data. Before running this function, you must download PADUS4_0Geodatabase.zip from https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-download. Unzip and call the path to thePADUS4_0Geodatabase folder in the get_protected() function.
 }

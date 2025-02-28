@@ -5,12 +5,12 @@
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param path (character) Path to location of data to extract
 #' @param id.label (character) Column name of location ID
-#' @param break.every
-#' @param buffer
 #' @param method (character) Method to extract data using terra::extract. Valid methods are "fast" and "precise"
 #'
-#' @returns
+#' @returns A data frame with summarized elevation for each polygon in locs
 #' @export
+#'
+#' @importFrom tidyselect all_of
 #'
 #' @examples
 #' \dontrun{
@@ -23,8 +23,8 @@ get_elevation <- function(locs,
                           path,
                           id.label,
                           #id.use = "grid.id",
-                          break.every = 1000,
-                          buffer = 100,
+                          # break.every = 1000,
+                          # buffer = 100,
                           method = "fast") {
 
   if (method %in% c("precise", "fast") == F) {
@@ -145,7 +145,7 @@ get_elevation <- function(locs,
                                                                    aspect < 0 ~ "flat")) %>%
                 dplyr::group_by(ID, direction) %>%
                 dplyr::summarize(metric = sum(weight), .groups = "drop") %>%
-                dplyr::pivot_wider(values_from = metric, names_from = direction)
+                tidyr::pivot_wider(values_from = metric, names_from = direction)
     ind2$`NA` <- NULL
 
     # make sure all directions are in df
@@ -163,7 +163,7 @@ get_elevation <- function(locs,
   }
 
   ned$id <- locs1$id
-  all <- dplyr::select(ned, id, everything())
+  all <- dplyr::select(ned, id, dplyr::everything())
 
   colnames(all)[1] <- id.label
 

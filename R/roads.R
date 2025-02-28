@@ -6,8 +6,10 @@
 #' @param path (character) Path to location of data to extract
 #' @param id.label (character) Column name of location ID
 #'
-#' @returns
+#' @returns A data frame with summarized roads for each polygon in locs
 #' @export
+#'
+#' @importFrom tidyselect all_of
 #'
 #' @examples
 #' \dontrun{
@@ -37,34 +39,32 @@ get_roads <- function(locs,
 
 
     tmp <- sf::st_read(paste0(path, "/roads.gdb"), layer = state) %>%
-      # Drop Z or M dimension
-      sf::st_zm() %>%
-      # Transform CRS from 4269 to 3857
-      sf::st_transform(3857) %>%
-      dplyr::rename(state = JURISNAME)
+            # Drop Z or M dimension
+            sf::st_zm() %>%
+            # Transform CRS from 4269 to 3857
+            sf::st_transform(3857) %>%
+            dplyr::rename(state = JURISNAME)
+
     saveRDS(tmp, file = paste0(path, '/roads.gdb/roads.rds'))
-
-
 
   }
 
   roads <- readRDS(paste0(path, "/roads.gdb/roads.rds"))
 
-  g1 <- locs %>%
-    st_transform(st_crs(roads))
+  g1 <- sf::st_transform(locs, sf::st_crs(roads))
 
 
   # Intersect roads with grid
-  st_intersection(g1, roads) %>%
+  sf::st_intersection(g1, roads) %>%
     # Calculate road length per grid and change to numeric
-    dplyr::mutate(roadLength.m = st_length(.),
+    dplyr::mutate(roadLength.m = sf::st_length(.),
                   roadLength.m = as.numeric(roadLength.m)) %>%
-    group_by(id) %>%
+    dplyr::group_by(id) %>%
     # By grid, calculate the total road length (km)
-    summarize(roadLength.km = sum(roadLength.m, na.rm=T)/1000) %>%
+    dplyr::summarize(roadLength.km = sum(roadLength.m, na.rm=T)/1000) %>%
     # Drop the flowline geometry
-    st_drop_geometry() %>%
-    select(id, roadLength.km) -> grid.covs
+    sf::st_drop_geometry() %>%
+    dplyr::select(id, roadLength.km) -> grid.covs
 
 
   # Join with locs
@@ -74,7 +74,7 @@ get_roads <- function(locs,
               dplyr::full_join(grid.covs, by = "id")
   roads1[is.na(roads1)] <- 0
 
-  roads2 <- roads1 %>% dplyr::select(all_of(id.label), roadLength.km)
+  roads2 <- dplyr::select(roads1, all_of(id.label), roadLength.km)
 
   return(roads2)
 

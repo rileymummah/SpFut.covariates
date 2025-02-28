@@ -4,14 +4,7 @@
 \alias{get_elevation}
 \title{Elevation}
 \usage{
-get_elevation(
-  locs,
-  path,
-  id.label,
-  break.every = 1000,
-  buffer = 100,
-  method = "fast"
-)
+get_elevation(locs, path, id.label, method = "fast")
 }
 \arguments{
 \item{locs}{(sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)}
@@ -21,6 +14,9 @@ get_elevation(
 \item{id.label}{(character) Column name of location ID}
 
 \item{method}{(character) Method to extract data using terra::extract. Valid methods are "fast" and "precise"}
+}
+\value{
+A data frame with summarized elevation for each polygon in locs
 }
 \description{
 Process US elevation data. Before running this function, you must download the USA elevation data from Download TIF from http://www.cec.org/north-american-environmental-atlas/elevation-2023/. Unzip and call the path to the elevation_tif folder in the get_elevation() function.

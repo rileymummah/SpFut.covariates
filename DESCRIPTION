@@ -1,6 +1,6 @@
 Package: SpFut.covariates
 Title: Download and Process Climate, Anthropological, and Environmental Covariates
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: 
     c(person(given = "C. Lane", 
               family = "Scher", 
@@ -22,7 +22,10 @@ Imports:
     dplyr,
     geodata,
     magrittr,
-    terra
+    stats,
+    terra,
+    tidyr,
+    tidyselect
 RoxygenNote: 7.3.2
 Suggests: 
     testthat (>= 3.0.0)

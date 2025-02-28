@@ -13,6 +13,9 @@ get_roads(locs, path, id.label)
 
 \item{id.label}{(character) Column name of location ID}
 }
+\value{
+A data frame with summarized roads for each polygon in locs
+}
 \description{
 Process US road data. Before running this function, you must download from https://geodata.bts.gov/datasets/0b6c2fd2e3ac40a7929cdff1d4cf604a_0/explore?location=23.778950%2C70.504834%2C3.54. Unzip, rename the folder roads.gdb, and call the path to the folder in the get_roads() function.
 }

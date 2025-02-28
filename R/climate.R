@@ -48,9 +48,7 @@ get_climate <- function(locs,
   # stack em up and crop to study region
   maps <- c(tmin.map, tmax.map, prec.map)
 
-  bb <- locs %>%
-    st_transform(st_crs(maps)) %>%
-    st_bbox()
+  bb <- sf::st_transform(locs, sf::st_crs(maps)) %>% sf::st_bbox()
   maps1 <- terra::crop(maps, bb)
 
   # transform grid to crs of maps

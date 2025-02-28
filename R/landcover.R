@@ -8,6 +8,8 @@
 #'
 #' @returns A data frame with summarized landcover for each polygon in locs
 #'
+#' @importFrom tidyselect all_of
+#'
 #' @examples
 #' \dontrun{
 #' data(locs)
@@ -65,7 +67,7 @@ get_landcover <- function(locs,
   # Organize
   all1[,id.label] <- locs1$conus.grid.id
 
-  all1 <- all1 %>% dplyr::select(dplyr::all_of(id.label), dplyr::all_of(as.character(1:19)))
+  all1 <- all1 %>% dplyr::select(all_of(id.label), all_of(as.character(1:19)))
   all1[is.na(all1)] <- 0
 
   total <- rowSums(all1[,2:20])

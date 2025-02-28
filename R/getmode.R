@@ -1,12 +1,10 @@
-#' Title
+#' .getmode
 #'
-#' @param v
-#' @param ties_method
+#' @param v input
+#' @param ties_method (character) Method for breaking ties. Must be "random" or "mean"
 #'
-#' @returns
-#' @export
-#'
-#' @examples
+#' @returns A summarization with ties broken
+
 
 .getmode <- function(v,
                      ties_method = "random") {

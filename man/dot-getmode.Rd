@@ -2,13 +2,18 @@
 % Please edit documentation in R/getmode.R
 \name{.getmode}
 \alias{.getmode}
-\title{Title}
+\title{.getmode}
 \usage{
 .getmode(v, ties_method = "random")
 }
 \arguments{
-\item{ties_method}{}
+\item{v}{input}
+
+\item{ties_method}{(character) Method for breaking ties. Must be "random" or "mean"}
+}
+\value{
+A summarization with ties broken
 }
 \description{
-Title
+.getmode
 }
