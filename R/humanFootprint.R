@@ -55,7 +55,7 @@ get_footprint <- function(locs,
   foot3 <- dplyr::mutate(foot2, id = locs$id) %>%
             dplyr::select(id, `wildareas-v3-2009-human-footprint`)
 
-  colnames(foot3) <- c(id.label, "density")
+  colnames(foot3) <- c(id.label, "footprint")
 
 
   return(foot3)
