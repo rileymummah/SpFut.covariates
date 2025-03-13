@@ -71,11 +71,11 @@ get_climate <- function(locs,
   prec1 <- clim[,c(25:36)]
 
   tmin1$tmin <- apply(tmin1, 1, min)
-  tmin2 <- dplyr::mutate(tmin, id = g1$id) %>% dplyr::select(id, tmin)
+  tmin2 <- dplyr::mutate(tmin1, id = g1$id) %>% dplyr::select(id, tmin)
 
 
   tmax1$tmax <- apply(tmax1, 1, max)
-  tmax2 <- dplyr::mutate(tmax, id = g1$id) %>% dplyr::select(id, tmax)
+  tmax2 <- dplyr::mutate(tmax1, id = g1$id) %>% dplyr::select(id, tmax)
 
 
   prec1$prec <- apply(prec1, 1, sum)
