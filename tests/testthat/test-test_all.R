@@ -1,7 +1,7 @@
 
 data(locs)
 
-locs <- locs[1:20,]
+locs <- locs[1:3,]
 path <- "../species-futures/data/USA/"
 id.label <- "grid.id"
 

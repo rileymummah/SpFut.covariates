@@ -4,7 +4,7 @@
 \alias{get_landcover}
 \title{Landcover}
 \usage{
-get_landcover(locs, path, id.label = "id")
+get_landcover(locs, path, id.label = "id", res.fact = 10)
 }
 \arguments{
 \item{locs}{(sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)}
@@ -12,6 +12,8 @@ get_landcover(locs, path, id.label = "id")
 \item{path}{(character) Path to location of data to extract}
 
 \item{id.label}{(character) Column name of location ID}
+
+\item{res.fact}{(positive integer) Input for terra::aggregate(). Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor) or three integers (when also aggregating over layers).}
 }
 \value{
 A data frame with summarized landcover for each polygon in locs
