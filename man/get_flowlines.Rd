@@ -23,6 +23,6 @@ Process US flowline data. Before running this function, you must download \emph{
 \dontrun{
 data(locs)
 
-dat <- get_flowlines(locs, path = 'data/', id.label = 'grid.id')
+get_flowlines(locs, path = 'data/', id.label = 'grid.id')
 }
 }

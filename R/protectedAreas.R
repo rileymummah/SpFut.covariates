@@ -1,6 +1,6 @@
 #' Protected areas
 #'
-#' @description Process US protected area data. Before running this function, you must download PADUS4_0Geodatabase.zip from https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-download. Unzip and call the path to thePADUS4_0Geodatabase folder in the get_protected() function.
+#' @description Process US protected area data. Before running this function, you must download \emph{PADUS4_0Geodatabase.zip} from \url{https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-download}. Unzip and call the path to the \emph{PADUS4_0Geodatabase} folder in the \code{get_protected()} function.
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param path (character) Path to location of data to extract
@@ -15,7 +15,7 @@
 #' \dontrun{
 #' data(locs)
 #'
-#' dat <- get_protected(locs, path = 'data/', id.label = 'grid.id')
+#' get_protected(locs, path = 'data/', id.label = 'grid.id')
 #' }
 
 get_protected <- function(locs,
@@ -35,10 +35,7 @@ get_protected <- function(locs,
                      layer='PADUS4_0Designation') %>%
 
         # Drop Z or M dimension
-        sf::st_zm() #%>%
-
-      # Transform CRS to 3857
-      #st_transform(3857)
+        sf::st_zm()
 
   # these are good
   valid <- pad[which(sf::st_is_valid(pad) == T),]

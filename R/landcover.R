@@ -1,11 +1,11 @@
 #' Landcover
 #'
-#' @description Process US landcover data. Before running this function, you must download the USA landcover data from http://www.cec.org/north-american-environmental-atlas/land-cover-30m-2020/. Call the path to the usa_land_cover_2020_30m_tif folder in the get_landcover() function.
+#' @description Process US landcover data. Before running this function, you must download the USA landcover data from \url{http://www.cec.org/north-american-environmental-atlas/land-cover-30m-2020/}. Call the path to the \emph{usa_land_cover_2020_30m_tif} folder in the \code{get_landcover()} function.
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param path (character) Path to location of data to extract
 #' @param id.label (character) Column name of location ID
-#' @param res.fact (positive integer) Input for terra::aggregate(). Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor) or three integers (when also aggregating over layers).
+#' @param res.fact (positive integer) Input for \pkg{terra}::\code{aggregate()}. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor) or three integers (when also aggregating over layers).
 #'
 #' @returns A data frame with summarized landcover for each polygon in locs
 #' @export
@@ -16,7 +16,7 @@
 #' \dontrun{
 #' data(locs)
 #'
-#' dat <- get_landcover(locs, path = 'data/', id.label = 'grid.id')
+#' get_landcover(locs, path = 'data/', id.label = 'grid.id')
 #' }
 
 get_landcover <- function(locs,
@@ -54,9 +54,6 @@ get_landcover <- function(locs,
     sub2 <- sub1
   }
 
-
-  # terra::plot(sub1)
-  # terra::plot(locs1, add = T)
 
   all <- terra::extract(sub2, locs1, fun = table)
 

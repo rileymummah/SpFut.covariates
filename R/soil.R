@@ -1,15 +1,15 @@
 #' Soil
 #'
-#' @description Download and process soil data. Source: geodata::soil_world()
+#' @description Download and process soil data using \pkg{geodata}::\code{soil_world()}
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param id.label (character) Column name of location ID
-#' @param var (character) Required argument for geodata::soil_world(). Valid options are: "bdod", "cfvo", "clay", "nitrogen", "ocd", "ocs", "phh2o", "sand", "silt", "soc", "wrb".
-#' @param depth (numeric) Required argument for geodata::soil_world(). Valid options are: 5, 15, 30, 60, 100, 200
-#' @param stat (character) Required argument for geodata::soil_world(). Valid options are: "mean", "uncertainty", "Q0.05", "Q0.5", "Q0.95". Ignored if var="wrb"
-#' @param name (character) Required argument for geodata::soil_world(). One of "Acrisols", "Albeluvisols", "Alisols", "Andosols", "Arenosols", "Calcisols", "Cambisols", "Chernozems", "Cryosols", "Durisols", "Ferralsols", "Fluvisols", "Gleysols", "Gypsisols", "Histosols", "Kastanozems", "Leptosols", "Lixisols", "Luvisols", "Nitisols", "Phaeozems", "Planosols", "Plinthosols", "Podzols", "Regosols", "Solonchaks", "Solonetz", "Stagnosols", "Umbrisols", "Vertisols". Only used when var="wrb"
+#' @param var (character) Required argument for \pkg{geodata}::\code{soil_world()}. Valid options are: "bdod", "cfvo", "clay", "nitrogen", "ocd", "ocs", "phh2o", "sand", "silt", "soc", "wrb".
+#' @param depth (numeric) Required argument for \pkg{geodata}::\code{soil_world()}. Valid options are: 5, 15, 30, 60, 100, 200
+#' @param stat (character) Required argument for \pkg{geodata}::\code{soil_world()}. Valid options are: "mean", "uncertainty", "Q0.05", "Q0.5", "Q0.95". Ignored if var="wrb"
+#' @param name (character) Required argument for \pkg{geodata}::\code{soil_world()}. One of "Acrisols", "Albeluvisols", "Alisols", "Andosols", "Arenosols", "Calcisols", "Cambisols", "Chernozems", "Cryosols", "Durisols", "Ferralsols", "Fluvisols", "Gleysols", "Gypsisols", "Histosols", "Kastanozems", "Leptosols", "Lixisols", "Luvisols", "Nitisols", "Phaeozems", "Planosols", "Plinthosols", "Podzols", "Regosols", "Solonchaks", "Solonetz", "Stagnosols", "Umbrisols", "Vertisols". Only used when var="wrb"
 #' @param path (character) Path to location of data to extract
-#' @param method (character) Method to extract data using terra::extract(). Valid methods are "fast" and "precise"
+#' @param method (character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"
 #'
 #' @returns A data frame with summarized soil composition for each polygon in locs
 #' @export

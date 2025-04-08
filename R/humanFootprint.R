@@ -1,12 +1,12 @@
 #' Human footprint
 #'
-#' @description Download and process human footprint data. Source: geodata::footprint()
+#' @description Download and process human footprint data using \pkg{geodata}::\code{footprint()}
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param id.label (character) Column name of location ID
-#' @param year (numeric) Year for geodata::footprint(). Valid years are 1993 or 2009.
+#' @param year (numeric) Year for \pkg{geodata}::\code{footprint()}. Valid years are 1993 or 2009.
 #' @param path (character) Path to location of data to extract
-#' @param method (character) Method to extract data using terra::extract(). Valid methods are "fast" and "precise"
+#' @param method (character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"
 #'
 #' @returns A data frame with summarized human footprint for each polygon in locs
 #' @export

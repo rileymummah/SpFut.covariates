@@ -16,7 +16,7 @@
 #' \dontrun{
 #' data(locs)
 #'
-#' dat <- get_elevation(locs, path = 'data/', id.label = 'grid.id')
+#' get_elevation(locs, path = 'data/', id.label = 'grid.id')
 #' }
 
 get_elevation <- function(locs,

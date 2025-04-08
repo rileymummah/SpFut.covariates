@@ -16,7 +16,7 @@
 #' \dontrun{
 #' data(locs)
 #'
-#' dat <- get_flowlines(locs, path = 'data/', id.label = 'grid.id')
+#' get_flowlines(locs, path = 'data/', id.label = 'grid.id')
 #' }
 
 get_flowlines <- function(locs,

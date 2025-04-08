@@ -25,6 +25,6 @@ Process USA elevation data using data from the Commission for Environmental Coop
 \dontrun{
 data(locs)
 
-dat <- get_elevation(locs, path = 'data/', id.label = 'grid.id')
+get_elevation(locs, path = 'data/', id.label = 'grid.id')
 }
 }

@@ -1,14 +1,14 @@
 #' Travel time
 #'
-#' @description Download and process travel time data. Source: geodata::travel_time()
+#' @description Download and process travel time data using \pkg{geodata}::\code{travel_time()}
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param id.label (character) Column name of location ID
-#' @param to (character) Required argument for geodata::travel_time(). Valid options are "city" or "port"
-#' @param size (numeric) Required argument for geodata::travel_time(). A positive integer indicating the size of the city or port. Can be between 1 and 9 if to="city" or between 1 and 5 if to="port".
-#' @param up (logical) Required argument for geodata::travel_time(). If TRUE the travel time to a city of the size chosen or larger is returned.
+#' @param to (character) Required argument for \pkg{geodata}::\code{travel_time()}. Valid options are "city" or "port"
+#' @param size (numeric) Required argument for \pkg{geodata}::\code{travel_time()}. A positive integer indicating the size of the city or port. Can be between 1 and 9 if to="city" or between 1 and 5 if to="port".
+#' @param up (logical) Required argument for \pkg{geodata}::\code{travel_time()}. If TRUE the travel time to a city of the size chosen or larger is returned.
 #' @param path (character) Path to location of data to extract
-#' @param method (character) Method to extract data using terra::extract(). Valid methods are "fast" and "precise"
+#' @param method (character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"
 #'
 #' @returns A data frame with summarized travel time for each polygon in locs
 #' @export

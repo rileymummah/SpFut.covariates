@@ -1,6 +1,6 @@
 #' Waterbodies
 #'
-#' @description Process US waterbody data. Before running this function, you must download NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z from https://www.epa.gov/waterdata/nhdplus-national-data. Unzip and call the path to the NHDPlusNationalData folder in the get_waterbodies() function.
+#' @description Process US waterbody data. Before running this function, you must download \emph{NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z} from \url{https://www.epa.gov/waterdata/nhdplus-national-data}. Unzip and call the path to the \emph{NHDPlusNationalData} folder in the \code{get_waterbodies()} function.
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param path (character) Path to location of data to extract
@@ -16,7 +16,7 @@
 #' \dontrun{
 #' data(locs)
 #'
-#' dat <- get_waterbodies(locs, path = 'data/', id.label = 'grid.id')
+#' get_waterbodies(locs, path = 'data/', id.label = 'grid.id')
 #' }
 
 get_waterbodies <- function(locs,
