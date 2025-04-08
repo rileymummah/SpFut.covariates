@@ -1,11 +1,11 @@
 #' Elevation
 #'
-#' @description Process USA elevation data using data from the Commission for Environmental Cooperation (CEC). Before running this function, you must download the USA elevation data from \url{http://www.cec.org/north-american-environmental-atlas/elevation-2023/}. Unzip and call the path to the elevation_tif folder in the function \code{get_elevation()} function.
+#' @description Process USA elevation data using data from the Commission for Environmental Cooperation (CEC). Before running this function, you must download the USA elevation data from \url{http://www.cec.org/north-american-environmental-atlas/elevation-2023/}. Unzip and call the path to the \emph{elevation_tif} folder in the function \code{get_elevation()} function.
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param path (character) Path to location of data to extract
 #' @param id.label (character) Column name of location ID
-#' @param method (character) Method to extract data using terra::extract. Valid methods are "fast" and "precise"
+#' @param method (character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"
 #'
 #' @returns A data frame with summarized elevation for each polygon in locs
 #' @export
@@ -22,9 +22,6 @@
 get_elevation <- function(locs,
                           path,
                           id.label,
-                          #id.use = "grid.id",
-                          # break.every = 1000,
-                          # buffer = 100,
                           method = "fast") {
 
   if (method %in% c("precise", "fast") == F) {
@@ -37,8 +34,6 @@ get_elevation <- function(locs,
 
   if ("elevation_tif" %in% list.files(path) == F) {
     stop("USA Elevation file does not exist. \nStep 1: Download TIF from http://www.cec.org/north-american-environmental-atlas/elevation-2023/ \nStep 2: Unzip, move elevation_tif folder to path, and try again")
-    #stop("USA Flowlines file does not exist. \nStep 1: Download NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z from https://www.epa.gov/waterdata/nhdplus-national-data \nStep 2: Unzip, move NHDPlusNationalData folder to path, and try again")
-
   }
 
 

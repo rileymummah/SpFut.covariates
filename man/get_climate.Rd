@@ -11,11 +11,11 @@ get_climate(locs, id.label, res = 0.5, path = tempdir(), method = "fast")
 
 \item{id.label}{(character) Column name of location ID}
 
-\item{res}{(numeric) Required argument for geodata::worldclim_global(). Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree).}
+\item{res}{(numeric) Required argument for \pkg{geodata}::\code{worldclim_global()}. Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree).}
 
 \item{path}{(character) Path to location of data to extract}
 
-\item{method}{(character) Method to extract data using terra::extract. Valid methods are "fast" and "precise"}
+\item{method}{(character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"}
 }
 \value{
 A data frame with summarized minimum temperature, maximum temperature, and total precipitation for each polygon in locs

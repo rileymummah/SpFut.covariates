@@ -10,7 +10,7 @@ get_buffered_bbox(locs)
 \item{locs}{(sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)}
 }
 \value{
-A buffered bounding box (sf::bbox object)
+A buffered bounding box (bbox object)
 }
 \description{
 Get a buffered bounding box for set of locations

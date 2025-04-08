@@ -4,7 +4,7 @@
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #'
-#' @returns A buffered bounding box (sf::bbox object)
+#' @returns A buffered bounding box (bbox object)
 #' @export
 #'
 #' @examples

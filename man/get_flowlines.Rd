@@ -17,7 +17,7 @@ get_flowlines(locs, path, id.label = "id")
 A data frame with summarized flowlines for each polygon in locs
 }
 \description{
-Process US flowline data. Before running this function, you must download NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z from https://www.epa.gov/waterdata/nhdplus-national-data. Unzip and call the path to the NHDPlusNationalData folder in the get_flowlines() function.
+Process US flowline data. Before running this function, you must download \emph{NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z} from \url{https://www.epa.gov/waterdata/nhdplus-national-data}. Unzip and call the path to the \emph{NHDPlusNationalData} folder in the \code{get_flowlines()} function.
 }
 \examples{
 \dontrun{

@@ -13,13 +13,13 @@ get_elevation(locs, path, id.label, method = "fast")
 
 \item{id.label}{(character) Column name of location ID}
 
-\item{method}{(character) Method to extract data using terra::extract. Valid methods are "fast" and "precise"}
+\item{method}{(character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"}
 }
 \value{
 A data frame with summarized elevation for each polygon in locs
 }
 \description{
-Process USA elevation data using data from the Commission for Environmental Cooperation (CEC). Before running this function, you must download the USA elevation data from \url{http://www.cec.org/north-american-environmental-atlas/elevation-2023/}. Unzip and call the path to the elevation_tif folder in the function \code{get_elevation()} function.
+Process USA elevation data using data from the Commission for Environmental Cooperation (CEC). Before running this function, you must download the USA elevation data from \url{http://www.cec.org/north-american-environmental-atlas/elevation-2023/}. Unzip and call the path to the \emph{elevation_tif} folder in the function \code{get_elevation()} function.
 }
 \examples{
 \dontrun{

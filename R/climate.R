@@ -5,9 +5,9 @@
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param id.label (character) Column name of location ID
-#' @param res (numeric) Required argument for geodata::worldclim_global(). Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree).
+#' @param res (numeric) Required argument for \pkg{geodata}::\code{worldclim_global()}. Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree).
 #' @param path (character) Path to location of data to extract
-#' @param method (character) Method to extract data using terra::extract. Valid methods are "fast" and "precise"
+#' @param method (character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"
 #'
 #' @returns A data frame with summarized minimum temperature, maximum temperature, and total precipitation for each polygon in locs
 #' @export

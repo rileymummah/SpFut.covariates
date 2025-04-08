@@ -24,7 +24,7 @@ get_population(
 
 \item{path}{(character) Path to location of data to extract}
 
-\item{method}{(character) Method to extract data using terra::extract. Valid methods are "fast" and "precise"}
+\item{method}{(character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"}
 }
 \value{
 A data frame with summarized population density for each polygon in locs
@@ -36,6 +36,6 @@ Download and process population density data using \pkg{geodata}::\code{populati
 \dontrun{
 data(locs)
 
-dat <- get_population(locs, id.label = 'grid.id')
+get_population(locs, id.label = 'grid.id')
 }
 }

@@ -7,7 +7,7 @@
 #' @param year (numeric) Year for \pkg{geodata}::\code{population()}. Valid years are 2000, 2005, 2010, 2015, and 2020
 #' @param res (numeric) Resolution for \pkg{geodata}::\code{population()}. Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree)
 #' @param path (character) Path to location of data to extract
-#' @param method (character) Method to extract data using terra::extract. Valid methods are "fast" and "precise"
+#' @param method (character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"
 #'
 #' @returns A data frame with summarized population density for each polygon in locs
 #' @export
@@ -16,7 +16,7 @@
 #' \dontrun{
 #' data(locs)
 #'
-#' dat <- get_population(locs, id.label = 'grid.id')
+#' get_population(locs, id.label = 'grid.id')
 #' }
 
 

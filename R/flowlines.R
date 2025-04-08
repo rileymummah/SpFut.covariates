@@ -1,6 +1,6 @@
 #' Flowlines
 #'
-#' @description Process US flowline data. Before running this function, you must download NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z from https://www.epa.gov/waterdata/nhdplus-national-data. Unzip and call the path to the NHDPlusNationalData folder in the get_flowlines() function.
+#' @description Process US flowline data. Before running this function, you must download \emph{NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z} from \url{https://www.epa.gov/waterdata/nhdplus-national-data}. Unzip and call the path to the \emph{NHDPlusNationalData} folder in the \code{get_flowlines()} function.
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param path (character) Path to location of data to extract
@@ -121,9 +121,6 @@ get_flowlines <- function(locs,
                 dplyr::full_join(grid.covs, by = id.label)
 
   grid.covs[is.na(grid.covs)] <- 0
-
-  # colnames(grid.covs)[1] <- "id"
-  # grid.covs$id <- as.character(grid.covs$id)
 
   return(grid.covs)
 
