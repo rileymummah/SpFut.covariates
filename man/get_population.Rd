@@ -18,9 +18,9 @@ get_population(
 
 \item{id.label}{(character) Column name of location ID}
 
-\item{year}{(numeric) Year for geodata::population(). Valid years are 2000, 2005, 2010, 2015, and 2020}
+\item{year}{(numeric) Year for \pkg{geodata}::\code{population()}. Valid years are 2000, 2005, 2010, 2015, and 2020}
 
-\item{res}{(numeric) Resolution for geodata::population(). Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree)}
+\item{res}{(numeric) Resolution for \pkg{geodata}::\code{population()}. Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree)}
 
 \item{path}{(character) Path to location of data to extract}
 
@@ -30,7 +30,7 @@ get_population(
 A data frame with summarized population density for each polygon in locs
 }
 \description{
-Download and process population density data. Source: geodata::population()
+Download and process population density data using \pkg{geodata}::\code{population()}
 }
 \examples{
 \dontrun{

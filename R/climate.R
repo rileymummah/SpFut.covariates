@@ -1,7 +1,7 @@
 #' Climate data
 #'
 #' @description
-#' Download and process climate data using \pkg{geodata}::worldclim_global()
+#' Download and process climate data using \pkg{geodata}::\code{worldclim_global()}
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param id.label (character) Column name of location ID
