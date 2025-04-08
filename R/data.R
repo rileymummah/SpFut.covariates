@@ -1,6 +1,6 @@
-#' First five letters of the alphabet
+#' An example location dataset
 #'
-#' A dataset containing first five letters of English alphabet
+#' A dataset containing numbered gridded locations for which to extract covariates
 #'
 #' @format An sf data frame with 2872 rows and 2 variables:
 #' \describe{

@@ -3,7 +3,7 @@
 \docType{data}
 \name{locs}
 \alias{locs}
-\title{First five letters of the alphabet}
+\title{An example location dataset}
 \format{
 An sf data frame with 2872 rows and 2 variables:
 \describe{
@@ -16,6 +16,6 @@ An sf data frame with 2872 rows and 2 variables:
 locs
 }
 \description{
-A dataset containing first five letters of English alphabet
+A dataset containing numbered gridded locations for which to extract covariates
 }
 \keyword{datasets}

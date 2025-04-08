@@ -19,7 +19,7 @@ get_elevation(locs, path, id.label, method = "fast")
 A data frame with summarized elevation for each polygon in locs
 }
 \description{
-Process US elevation data. Before running this function, you must download the USA elevation data from Download TIF from http://www.cec.org/north-american-environmental-atlas/elevation-2023/. Unzip and call the path to the elevation_tif folder in the get_elevation() function.
+Process USA elevation data. Before running this function, you must download the USA elevation data from Download TIF from \url{http://www.cec.org/north-american-environmental-atlas/elevation-2023/}. Unzip and call the path to the elevation_tif folder in the get_elevation() function.
 }
 \examples{
 \dontrun{

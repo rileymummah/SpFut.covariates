@@ -1,5 +1,8 @@
 #' Climate data
 #'
+#' @description
+#' Download and process climate data using \pkg{geodata}::worldclim_global()
+#'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param id.label (character) Column name of location ID
 #' @param res (numeric) Required argument for geodata::worldclim_global(). Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree).

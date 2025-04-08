@@ -21,7 +21,7 @@ get_climate(locs, id.label, res = 0.5, path = tempdir(), method = "fast")
 A data frame with summarized minimum temperature, maximum temperature, and total precipitation for each polygon in locs
 }
 \description{
-Climate data
+Download and process climate data using \pkg{geodata}::worldclim_global()
 }
 \examples{
 \dontrun{
