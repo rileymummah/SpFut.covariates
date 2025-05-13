@@ -1,0 +1,81 @@
+---
+title: "Covariates"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Covariates}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE, cache=T}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+We recommend installing the package using:
+```{r install, eval=F}
+devtools::install_github('rileymummah/SpFut.covariates', 
+                         build_vignettes = T, force = T)
+```
+
+
+# Setup
+First, let's load the library and the test data for the functions.
+
+```{r setup}
+library(SpFut.covariates)
+
+data(locs)
+
+head(locs)
+```
+
+`locs` contains two columns: grid.id and POLYGON geometry. For simplicity, let's only pull covariates for 2 grid locations. We also need to set a path to where the downloaded datasets are loaded and identify the column name of the grid cell ID number.
+
+```{r}
+locs <- locs[1:2,]
+path <- "data/USA/"
+id.label <- "grid.id"
+```
+
+
+## Population density
+dat <- get_population(locs, id.label)
+
+## Human footprint
+dat <- get_footprint(locs, id.label)
+
+## Traveltime
+dat <- get_traveltime(locs, id.label)
+
+## Soil composition
+dat <- get_soil(locs, id.label)
+
+## Climate
+dat <- get_climate(locs, id.label)
+
+
+# Download data
+
+If you intend to use any of the following function, you must first download external datasets as instructed in the documentation.
+
+## Landcover
+dat <- get_landcover(locs, path, id.label)
+
+## Elevation
+dat <- get_elevation(locs, path, id.label)
+
+## Protected areas
+dat <- get_protected(locs, path, id.label)
+
+## Flowlines
+dat <- get_flowlines(locs, path, id.label)
+
+## Water bodies
+dat <- get_waterbodies(locs, path, id.label)
+
+## Roads
+dat <- get_roads(locs, path, id.label)
