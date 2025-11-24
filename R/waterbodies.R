@@ -33,7 +33,7 @@ get_waterbodies <- function(locs,
   }
 
 
-  if ("flowlines.rds" %in% list.files(paste0(path, "/NHDPlusNationalData/")) == F) {
+  if ("waterbody.rds" %in% list.files(paste0(path, "/NHDPlusNationalData/")) == F) {
     cat("Pre-processing of waterbodies data has not been done yet. Pre-processing now.\n")
 
     # Load NHD flowline layer of National Database
