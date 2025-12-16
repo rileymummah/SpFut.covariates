@@ -5,12 +5,6 @@ locs <- locs[1:3,]
 path <- "../species-futures/data/USA/"
 id.label <- "grid.id"
 
-tmp <- cleaning(locs, id.label, path)
-
-tmp1 <- get_buffered_bbox(locs)
-
-
-
 # # test population
 # dat <- get_population(locs, id.label)
 #
@@ -23,8 +17,7 @@ tmp1 <- get_buffered_bbox(locs)
 # # test soil
 # dat <- get_soil(locs, id.label)
 
-# test climate
-# dat <- get_climate(locs, id.label)
+
 
 # test landcover
 # dat <- get_landcover(locs, path, id.label)
