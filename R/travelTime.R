@@ -13,6 +13,12 @@
 #' @returns A data frame with summarized travel time for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
+#' @importFrom geodata travel_time
+#' @importFrom sf st_transform st_crs
+#' @importFrom terra crop zonal vect
+#' @importFrom dplyr mutate select
+#'
 #' @examples
 #' \dontrun{
 #' data(locs)
@@ -37,27 +43,28 @@ get_traveltime <- function(locs,
   locs <- tmp$locs
 
   # get traveltime map from geodata
-  travel.map <- geodata::travel_time(to = to,
-                                     size = size,
-                                     up = up,
-                                     path = path)
+  travel.map <- travel_time(to = to,
+                            size = size,
+                            up = up,
+                            path = path)
 
   # Get things in order
-  locs1 <- sf::st_transform(locs, sf::st_crs(travel.map))
+  locs1 <- st_transform(locs, st_crs(travel.map))
 
   bb <- get_buffered_bbox(locs1)
-  travel1 <- terra::crop(travel.map, bb)
+  travel1 <- crop(travel.map, bb)
 
 
   cat("Extracting data\n")
   if (method == "fast") {
-    travel2 <- terra::zonal(travel1, terra::vect(locs1))
+    travel2 <- zonal(travel1, vect(locs1))
   } else if (method == "precise") {
-    travel2 <- terra::zonal(travel1, terra::vect(locs1), weights = T)
+    travel2 <- zonal(travel1, vect(locs1), weights = T)
   }
 
   # clean up
-  travel3 <- dplyr::mutate(travel2, id = locs$id) %>% dplyr::select(id, `travel_time_to_cities_1`)
+  travel3 <- mutate(travel2, id = locs$id) %>%
+    select(.data$id, .data$`travel_time_to_cities_1`)
 
   colnames(travel3) <- c(id.label, "traveltime")
 

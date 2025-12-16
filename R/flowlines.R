@@ -9,8 +9,12 @@
 #' @returns A data frame with summarized flowlines for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
 #' @importFrom stats weighted.mean
 #' @importFrom tidyselect all_of
+#' @importFrom sf st_read st_zm st_transform st_crs st_intersection st_length st_drop_geometry
+#' @importFrom dplyr mutate filter group_by summarize ungroup select distinct arrange full_join
+#' @importFrom tidyr pivot_wider
 #'
 #' @examples
 #' \dontrun{
@@ -36,12 +40,12 @@ get_flowlines <- function(locs,
     cat("Pre-processing of flowlines data has not been done yet. Pre-processing now.\n")
 
     # Load NHD flowline layer of National Database
-    flowlines <- sf::st_read(paste0(path, "/NHDPlusNationalData/NHDPlusV21_National_Seamless_Flattened_Lower48.gdb"),
+    flowlines <- st_read(paste0(path, "/NHDPlusNationalData/NHDPlusV21_National_Seamless_Flattened_Lower48.gdb"),
                              layer='NHDFlowline_Network') %>%
                   # Drop Z or M dimension
-                  sf::st_zm() %>%
+                  st_zm() %>%
                   # Transform CRS from 4269 to 3857
-                  sf::st_transform(3857)
+                  st_transform(3857)
 
     # Save as RDS file
     saveRDS(flowlines, paste0(path, '/NHDPlusNationalData/flowlines.rds'))
@@ -52,73 +56,72 @@ get_flowlines <- function(locs,
   flowlines <- readRDS(paste0(path, '/NHDPlusNationalData/flowlines.rds')) %>%
 
     # missing values coded as -9
-    dplyr::mutate(StreamOrde = ifelse(StreamOrde == -9, NA, StreamOrde))
+    mutate(StreamOrde = ifelse(.data$StreamOrde == -9, NA, .data$StreamOrde))
 
 
   cat("Transforming\n")
-  g1 <- sf::st_transform(locs, sf::st_crs(flowlines))
+  g1 <- st_transform(locs, st_crs(flowlines))
 
   cat("Intersecting\n")
 
   # Intersect national flowlines with grid
-  sf::st_intersection(g1, flowlines) %>%
+  st_intersection(g1, flowlines) %>%
     # Calculate stream length per grid and change to numeric
-    dplyr::mutate(streamLength.m = sf::st_length(.),
-                  streamLength.m = as.numeric(streamLength.m)) -> tmp
+    mutate(streamLength.m = st_length(),
+                  streamLength.m = as.numeric(.data$streamLength.m)) -> tmp
 
   cat("Calculating total stream length and mean order\n")
 
   # Group at the grid-level and calculate stream length and average stream order
   tmp %>%
-    dplyr::filter(FTYPE == "StreamRiver") %>%
-    dplyr::group_by(id) %>%
+    filter(.data$FTYPE == "StreamRiver") %>%
+    group_by(.data$id) %>%
     # By grid, calculate the total stream length (km) and
     # the average stream order, weighted by stream length
-    dplyr::summarize(streamLength.km = sum(streamLength.m, na.rm=T)/1000,
-                     streamOrd.mean = stats::weighted.mean(StreamOrde, streamLength.m, na.rm=T)) %>%
+    summarize(streamLength.km = sum(.data$streamLength.m, na.rm=T)/1000,
+              streamOrd.mean = weighted.mean(.data$StreamOrde, .data$streamLength.m, na.rm=T)) %>%
     # Drop the flowline geometry
-    sf::st_drop_geometry() -> tmp1
+    st_drop_geometry() -> tmp1
 
   cat("Calculating stream length by stream order\n")
 
   # Group by grid and stream order to calculate stream length by stream order
   tmp %>%
-    dplyr::filter(FTYPE == "StreamRiver") %>%
-    dplyr::group_by(id, StreamOrde) %>%
-    dplyr::mutate(streamOrd = StreamOrde,
-                  streamOrd.sum = sum(streamLength.m)/1000) %>%
-    dplyr::ungroup() %>%
-    sf::st_drop_geometry() %>%
-    dplyr::select(id, streamOrd, streamOrd.sum) %>%
-    dplyr::distinct() %>%
-    tidyr::pivot_wider(id_cols = id,
-                        names_from = streamOrd, names_prefix = 'streamOrd',
-                        values_from = streamOrd.sum) %>% # in km
+    filter(FTYPE == "StreamRiver") %>%
+    group_by(.data$id, .data$StreamOrde) %>%
+    mutate(streamOrd = .data$StreamOrde,
+           streamOrd.sum = sum(.data$streamLength.m)/1000) %>%
+    ungroup() %>%
+    st_drop_geometry() %>%
+    select(.data$id, .data$streamOrd, .data$streamOrd.sum) %>%
+    distinct() %>%
+    tidyr::pivot_wider(id_cols = .data$id, names_from = .data$streamOrd,
+                       names_prefix = 'streamOrd', values_from = .data$streamOrd.sum) %>% # in km
     #select(all_of(id.use), paste0('streamOrd',1:max(tmp$StreamOrde, na.rm=T)), streamOrdNA) %>%
-    dplyr::arrange(id) -> tmp2
+    arrange(.data$id) -> tmp2
 
 
-  cat("Calculating artificial habitat (FTYPE = CanalDitch)\n")
+  cat("Calculating artificial habitat (.data$FTYPE = CanalDitch)\n")
 
   tmp %>%
-    dplyr::filter(FTYPE == "CanalDitch") %>%
-    dplyr::group_by(id) %>%
+    filter(.data$FTYPE == "CanalDitch") %>%
+    group_by(.data$id) %>%
     # By grid, calculate the total stream length (km) and
     # the average stream order, weighted by stream length
-    dplyr::summarize(artificialLength.km = sum(streamLength.m, na.rm=T)/1000) %>%
+    summarize(artificialLength.km = sum(.data$streamLength.m, na.rm=T)/1000) %>%
     # Drop the flowline geometry
-    sf::st_drop_geometry() -> tmp3
+    st_drop_geometry() -> tmp3
 
 
   cat("Finishing up\n")
 
-  dplyr::full_join(tmp1, tmp2, by = "id") %>% dplyr::full_join(tmp3, by = "id") -> grid.covs
+  full_join(tmp1, tmp2, by = "id") %>% full_join(tmp3, by = "id") -> grid.covs
   colnames(grid.covs)[1] <- id.label
 
   grid.covs <- locs %>%
-                sf::st_drop_geometry() %>%
-                dplyr::select(all_of(id.label)) %>%
-                dplyr::full_join(grid.covs, by = id.label)
+                st_drop_geometry() %>%
+                select(all_of(id.label)) %>%
+                full_join(grid.covs, by = id.label)
 
   grid.covs[is.na(grid.covs)] <- 0
 

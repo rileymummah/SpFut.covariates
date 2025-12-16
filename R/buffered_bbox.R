@@ -7,6 +7,8 @@
 #' @returns A buffered bounding box (bbox object)
 #' @export
 #'
+#' @importFrom sf st_crs st_bbox
+#'
 #' @examples
 #' \dontrun{
 #' data(locs)
@@ -17,7 +19,7 @@
 
 get_buffered_bbox <- function(locs) {
 
-  tmp <- sf::st_crs(locs, parameters = T)
+  tmp <- st_crs(locs, parameters = T)
   if (tmp$units_gdal == "degree") {
     buffer <- 1
   } else if (tmp$units_gdal == "metre") {
@@ -26,7 +28,7 @@ get_buffered_bbox <- function(locs) {
     cat("Geometry units are neither 'degree' nor 'metre'. Please adjust and run again.")
   }
 
-  bbo <- sf::st_bbox(locs)
+  bbo <- st_bbox(locs)
   bbo[1] <- bbo[1] - buffer
   bbo[2] <- bbo[2] - buffer
   bbo[3] <- bbo[3] + buffer

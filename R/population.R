@@ -12,6 +12,12 @@
 #' @returns A data frame with summarized population density for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
+#' @importFrom geodata population
+#' @importFrom sf st_transform st_transform st_crs st_bbox
+#' @importFrom terra zonal vect crop
+#' @importFrom dplyr mutate select
+#'
 #' @examples
 #' \dontrun{
 #' data(locs)
@@ -35,28 +41,28 @@ get_population <- function(locs,
   locs <- tmp$locs
 
   # get population map from geodata
-  population.map <- geodata::population(year = year,
+  population.map <- population(year = year,
                                         res = res,
                                         path = path)
 
   # Get things in order
-  locs1 <- sf::st_transform(locs, crs = sf::st_crs(population.map))
+  locs1 <- st_transform(locs, crs = st_crs(population.map))
 
   bb <- get_buffered_bbox(locs = locs1)
-  bb <- sf::st_bbox(locs1)
-  pop1 <- terra::crop(population.map, bb)
+  bb <- st_bbox(locs1)
+  pop1 <- crop(population.map, bb)
 
 
   cat("Extracting data\n")
   if (method == "fast") {
-    pop2 <- terra::zonal(pop1, terra::vect(locs1))
+    pop2 <- zonal(pop1, vect(locs1))
   } else if (method == "precise") {
-    pop2 <- terra::zonal(pop1, terra::vect(locs1), weights = T)
+    pop2 <- zonal(pop1, vect(locs1), weights = T)
   }
 
   # clean up
-  pop3 <- dplyr::mutate(pop2, id = locs$id)
-  pop3 <- dplyr::select(pop3, id, population_density)
+  pop3 <- mutate(pop2, id = locs$id)
+  pop3 <- select(pop3, .data$id, .data$population_density)
 
   colnames(pop3) <- c(id.label, "density")
 

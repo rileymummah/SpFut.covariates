@@ -10,7 +10,11 @@
 #' @returns A data frame with summarized landcover for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
 #' @importFrom tidyselect all_of everything
+#' @importFrom terra rast crop mask aggregate extract
+#' @importFrom sf st_transform st_bbox st_crs
+#' @importFrom dplyr select
 #'
 #' @examples
 #' \dontrun{
@@ -37,25 +41,25 @@ get_landcover <- function(locs,
 
   # load data
   # these are stored locally but can be downloaded from http://www.cec.org/north-american-environmental-atlas/land-cover-30m-2020/
-  usa <- terra::rast(paste0(path, "/land_cover_2020v2_30m_tif/land_cover_2020v2_30m_tif/NA_NALCMS_landcover_2020v2_30m/data/NA_NALCMS_landcover_2020v2_30m.tif"))
+  usa <- rast(paste0(path, "/land_cover_2020v2_30m_tif/land_cover_2020v2_30m_tif/NA_NALCMS_landcover_2020v2_30m/data/NA_NALCMS_landcover_2020v2_30m.tif"))
   # give locs same crs as raster
-  locs1 <- sf::st_transform(locs, sf::st_crs(usa))
+  locs1 <- st_transform(locs, st_crs(usa))
 
   # Extract landcover values
   cat("Extracting landcover values\n")
-  bb1 <- sf::st_bbox(locs1)
-  sub <- terra::crop(usa, bb1)
-  sub1 <- terra::mask(sub, locs1)
+  bb1 <- st_bbox(locs1)
+  sub <- crop(usa, bb1)
+  sub1 <- mask(sub, locs1)
 
   if (res.fact > 1) {
-    sub2 <- terra::aggregate(sub1, fact = res.fact, fun = "modal")
+    sub2 <- aggregate(sub1, fact = res.fact, fun = "modal")
 
   } else {
     sub2 <- sub1
   }
 
 
-  all <- terra::extract(sub2, locs1, fun = table)
+  all <- extract(sub2, locs1, fun = table)
 
   # clean up
   cat("Cleaning\n")
@@ -95,7 +99,8 @@ get_landcover <- function(locs,
 
   # Organize
   all1[,id.label] <- as.data.frame(locs1)[,id.label]
-  all1 <- dplyr::select(all1, !ID) %>% dplyr::select(tidyselect::all_of(id.label), tidyselect::everything())
+  all1 <- select(all1, !.data$ID) %>%
+    select(all_of(id.label), everything())
 
   # all1 <- all1 %>%
   #   select(all_of(id.label), all_of(as.character(1:19)))

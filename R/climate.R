@@ -12,6 +12,13 @@
 #' @returns A data frame with summarized minimum temperature, maximum temperature, and total precipitation for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
+#' @importFrom magrittr "%>%"
+#' @importFrom geodata worldclim_global
+#' @importFrom terra crop zonal vect
+#' @importFrom sf st_transform st_drop_geometry st_crs st_bbox
+#' @importFrom dplyr mutate select full_join
+#'
 #' @examples
 #' \dontrun{
 #' data(locs)
@@ -36,35 +43,35 @@ get_climate <- function(locs,
 
 
   # download rasters
-  tmin.map <- geodata::worldclim_global(res = res,
-                                        var = "tmin",
-                                        path = path)
+  tmin.map <- worldclim_global(res = res,
+                               var = "tmin",
+                               path = path)
 
-  tmax.map <- geodata::worldclim_global(res = res,
-                                        var = "tmax",
-                                        path = path)
+  tmax.map <- worldclim_global(res = res,
+                               var = "tmax",
+                               path = path)
 
-  prec.map <- geodata::worldclim_global(res = res,
-                                        var = "prec",
-                                        path = path)
+  prec.map <- worldclim_global(res = res,
+                               var = "prec",
+                               path = path)
 
   # stack em up and crop to study region
   maps <- c(tmin.map, tmax.map, prec.map)
 
-  bb <- sf::st_transform(locs, sf::st_crs(maps)) %>% sf::st_bbox()
-  maps1 <- terra::crop(maps, bb)
+  bb <- st_transform(locs, st_crs(maps)) %>% st_bbox()
+  maps1 <- crop(maps, bb)
 
   # transform grid to crs of maps
-  g1 <- sf::st_transform(locs, sf::st_crs(maps))
+  g1 <- st_transform(locs, st_crs(maps))
 
-  locs <- sf::st_drop_geometry(locs)
+  locs <- st_drop_geometry(locs)
 
 
   cat("Extracting data\n")
   if (method == "fast") {
-    clim <- terra::zonal(maps1, terra::vect(g1))
+    clim <- zonal(maps1, vect(g1))
   } else if (method == "precise") {
-    clim <- terra::zonal(maps1, terra::vect(g1), weights = T)
+    clim <- zonal(maps1, vect(g1), weights = T)
   }
 
 
@@ -74,19 +81,19 @@ get_climate <- function(locs,
   prec1 <- clim[,c(25:36)]
 
   tmin1$tmin <- apply(tmin1, 1, min)
-  tmin2 <- dplyr::mutate(tmin1, id = g1$id) %>% dplyr::select(id, tmin)
+  tmin2 <- mutate(tmin1, id = g1$id) %>% select(.data$id, .data$tmin)
 
 
   tmax1$tmax <- apply(tmax1, 1, max)
-  tmax2 <- dplyr::mutate(tmax1, id = g1$id) %>% dplyr::select(id, tmax)
+  tmax2 <- mutate(tmax1, id = g1$id) %>% select(.data$id, .data$tmax)
 
 
   prec1$prec <- apply(prec1, 1, sum)
   prec1$spr.prec <- apply(prec1[,3:5], 1, sum)
-  prec2 <- dplyr::mutate(prec1, id = g1$id) %>% dplyr::select(id, prec, spr.prec)
+  prec2 <- mutate(prec1, id = g1$id) %>% select(.data$id, .data$prec, .data$spr.prec)
 
-  clim <- dplyr::full_join(tmin2, tmax2, by = "id") %>%
-            dplyr::full_join(prec2, by = "id")
+  clim <- full_join(tmin2, tmax2, by = "id") %>%
+            full_join(prec2, by = "id")
 
   colnames(clim)[1] <- id.label
 

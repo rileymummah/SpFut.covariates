@@ -7,6 +7,8 @@
 #' @returns A list of the locations and the path
 #' @export
 #'
+#' @importFrom dplyr pull
+#'
 #' @examples
 #' \dontrun{
 #' data(locs)
@@ -17,7 +19,7 @@
 cleaning <- function(locs, id.label, path) {
 
   id.ind <- grep(id.label, colnames(locs))
-  locs$id <- dplyr::pull(locs, id.label)
+  locs$id <- pull(locs, id.label)
 
   if (substr(path, nchar(path), nchar(path)) == "/") path <- substr(path, 1, nchar(path)-1)
 

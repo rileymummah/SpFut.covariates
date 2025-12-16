@@ -9,7 +9,12 @@
 #' @returns A data frame with summarized protected areas for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
+#' @importFrom magrittr "%>%"
 #' @importFrom tidyselect starts_with all_of
+#' @importFrom sf st_read st_zm st_is_valid st_make_valid st_transform st_crop st_area st_intersection st_union
+#' @importFrom dplyr select bind_rows all_of group_by summarize full_join
+#' @importFrom tidyr pivot_wider
 #'
 #' @examples
 #' \dontrun{
@@ -31,21 +36,21 @@ get_protected <- function(locs,
   }
 
 
-  pad <- sf::st_read(paste0(path, "/PADUS4_0Geodatabase/PADUS4_0_Geodatabase.gdb/"),
+  pad <- st_read(paste0(path, "/PADUS4_0Geodatabase/PADUS4_0_Geodatabase.gdb/"),
                      layer='PADUS4_0Designation') %>%
 
         # Drop Z or M dimension
-        sf::st_zm()
+        st_zm()
 
   # these are good
-  valid <- pad[which(sf::st_is_valid(pad) == T),]
+  valid <- pad[which(st_is_valid(pad) == T),]
 
   # these are bad
-  invalid <- pad[which(sf::st_is_valid(pad) == F),]
-  invalid1 <- sf::st_make_valid(invalid)
+  invalid <- pad[which(st_is_valid(pad) == F),]
+  invalid1 <- st_make_valid(invalid)
 
   # these are very bad
-  other <- pad[which(is.na(sf::st_is_valid(pad))),]
+  other <- pad[which(is.na(st_is_valid(pad))),]
   # they are concentrated in the west but spread across CONUS
   #
   # tmp <- st_cast(other, "GEOMETRYCOLLECTION") %>% st_collection_extract("POLYGON")
@@ -64,12 +69,12 @@ get_protected <- function(locs,
   cat("Warning: There are ", nrow(other), " shapes that are not useable")
 
   # project locs
-  g1 <- dplyr::select(locs, id, geometry) %>%
-          sf::st_transform(sf::st_crs(pad))
+  g1 <- select(locs, .data$id, .data$geometry) %>%
+          st_transform(st_crs(pad))
   bb <- get_buffered_bbox(g1)
 
   #
-  pad1 <- dplyr::bind_rows(valid, invalid1) %>% sf::st_crop(bb)
+  pad1 <- bind_rows(valid, invalid1) %>% st_crop(bb)
 
   if (nrow(pad1) == 0) {
     allnms <- paste0("protected.", c("FED", "LOC", "UNK", "STAT", "NGO", "DIST", "PVT", "JNT", "TRIB", "TOT"))
@@ -81,27 +86,27 @@ get_protected <- function(locs,
 
     g2$id <- g1$id
 
-    g2 <- dplyr::select(g2, id, dplyr::all_of(allnms))
+    g2 <- select(g2, .data$id, all_of(allnms))
 
   } else {
 
     # combine each management type into one row
-    pad1 <- dplyr::group_by(pad1, Mang_Type) %>%
-            dplyr::summarize(geometry = sf::st_union(SHAPE))
+    pad1 <- group_by(pad1, .data$Mang_Type) %>%
+            summarize(geometry = st_union(.data$SHAPE))
 
     # get intersection
-    tmp <- sf::st_intersection(g1, pad1)
-    tmp$overlap.area <- as.numeric(sf::st_area(tmp))
+    tmp <- st_intersection(g1, pad1)
+    tmp$overlap.area <- as.numeric(st_area(tmp))
 
     # add up protected area of each type within each cell
-    tmp <- dplyr::group_by(tmp, id, Mang_Type) %>%
-            dplyr::summarize(protected = sum(overlap.area),
+    tmp <- group_by(tmp, .data$id, .data$Mang_Type) %>%
+            summarize(protected = sum(.data$overlap.area),
                       .groups = "drop") %>%
-            sf::st_drop_geometry()
+            st_drop_geometry()
 
-    g2 <- dplyr::full_join(g1, as.data.frame(tmp), by = "id") %>%
-            sf::st_drop_geometry() %>%
-            tidyr::pivot_wider(names_from = Mang_Type, values_from = protected)
+    g2 <- full_join(g1, as.data.frame(tmp), by = "id") %>%
+            st_drop_geometry() %>%
+            tidyr::pivot_wider(names_from = .data$Mang_Type, values_from = .data$protected)
 
     g2$`NA` <- NULL
 
@@ -111,9 +116,9 @@ get_protected <- function(locs,
     g2$protected.TOT <- rowSums(g2[,2:ncol(g2)])
 
     g2 <- locs %>%
-            sf::st_drop_geometry() %>%
+            st_drop_geometry() %>%
             #select(id) %>%
-            dplyr::full_join(g2, by = "id")
+            full_join(g2, by = "id")
 
     # make sure all columns exist
     allnms <- paste0("protected.", c("FED", "LOC", "UNK", "STAT", "NGO", "DIST", "PVT", "JNT", "TRIB", "TOT"))
@@ -129,7 +134,7 @@ get_protected <- function(locs,
 
     g2[is.na(g2)] <- 0
 
-    g2 <- dplyr::select(g2, all_of(id.label), tidyselect::starts_with("protected."))
+    g2 <- select(g2, all_of(id.label), tidyselect::starts_with("protected."))
 
 
   }

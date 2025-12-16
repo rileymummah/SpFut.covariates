@@ -9,7 +9,11 @@
 #' @returns A data frame with summarized roads for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
+#' @importFrom magrittr "%>%"
 #' @importFrom tidyselect all_of
+#' @importFrom sf st_layers st_read st_transform st_intersection st_drop_geometry st_length
+#' @importFrom dplyr rename mutate group_by summarize select full_join
 #'
 #' @examples
 #' \dontrun{
@@ -35,15 +39,15 @@ get_roads <- function(locs,
     cat("Pre-processing of roads data has not been done yet. Pre-processing now\n")
 
 
-    state <- sf::st_layers(paste0(path, '/roads.gdb'))$name
+    state <- st_layers(paste0(path, '/roads.gdb'))$name
 
 
-    tmp <- sf::st_read(paste0(path, "/roads.gdb"), layer = state) %>%
+    tmp <- st_read(paste0(path, "/roads.gdb"), layer = state) %>%
             # Drop Z or M dimension
-            sf::st_zm() %>%
+            st_zm() %>%
             # Transform CRS from 4269 to 3857
-            sf::st_transform(3857) %>%
-            dplyr::rename(state = JURISNAME)
+            st_transform(3857) %>%
+            rename(state = .data$JURISNAME)
 
     saveRDS(tmp, file = paste0(path, '/roads.gdb/roads.rds'))
 
@@ -51,30 +55,30 @@ get_roads <- function(locs,
 
   roads <- readRDS(paste0(path, "/roads.gdb/roads.rds"))
 
-  g1 <- sf::st_transform(locs, sf::st_crs(roads))
+  g1 <- st_transform(locs, st_crs(roads))
 
 
   # Intersect roads with grid
-  sf::st_intersection(g1, roads) %>%
+  st_intersection(g1, roads) %>%
     # Calculate road length per grid and change to numeric
-    dplyr::mutate(roadLength.m = sf::st_length(.),
-                  roadLength.m = as.numeric(roadLength.m)) %>%
-    dplyr::group_by(id) %>%
+    mutate(roadLength.m = st_length(),
+                  roadLength.m = as.numeric(.data$roadLength.m)) %>%
+    group_by(.data$id) %>%
     # By grid, calculate the total road length (km)
-    dplyr::summarize(roadLength.km = sum(roadLength.m, na.rm=T)/1000) %>%
+    summarize(roadLength.km = sum(.data$roadLength.m, na.rm=T)/1000) %>%
     # Drop the flowline geometry
-    sf::st_drop_geometry() %>%
-    dplyr::select(id, roadLength.km) -> grid.covs
+    st_drop_geometry() %>%
+    select(.data$id, .data$roadLength.km) -> grid.covs
 
 
   # Join with locs
   roads1 <- locs %>%
-              sf::st_drop_geometry() %>%
+              st_drop_geometry() %>%
               #select(id) %>%
-              dplyr::full_join(grid.covs, by = "id")
+              full_join(grid.covs, by = "id")
   roads1[is.na(roads1)] <- 0
 
-  roads2 <- dplyr::select(roads1, all_of(id.label), roadLength.km)
+  roads2 <- select(roads1, all_of(id.label), .data$roadLength.km)
 
   return(roads2)
 

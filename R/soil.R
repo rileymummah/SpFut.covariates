@@ -14,6 +14,12 @@
 #' @returns A data frame with summarized soil composition for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
+#' @importFrom geodata soil_world
+#' @importFrom sf st_transform st_crs
+#' @importFrom terra crop zonal vect
+#' @importFrom dplyr mutate select everything
+#'
 #' @examples
 #' \dontrun{
 #' data(locs)
@@ -40,28 +46,28 @@ get_soil <- function(locs,
 
 
   # Get soil map
-  soil.map <- geodata::soil_world(var = var,
-                                  depth = depth,
-                                  stat = stat,
-                                  name = name,
-                                  path = path)
+  soil.map <- soil_world(var = var,
+                         depth = depth,
+                         stat = stat,
+                         name = name,
+                         path = path)
 
   # Get things in order
-  locs1 <- sf::st_transform(locs, sf::st_crs(soil.map))
+  locs1 <- st_transform(locs, st_crs(soil.map))
 
   bb <- get_buffered_bbox(locs1)
-  soil1 <- terra::crop(soil.map, bb)
+  soil1 <- crop(soil.map, bb)
 
 
   cat("Extracting data\n")
   if (method == "fast") {
-    soil2 <- terra::zonal(soil1, terra::vect(locs1))
+    soil2 <- zonal(soil1, vect(locs1))
   } else if (method == "precise") {
-    soil2 <- terra::zonal(soil1, terra::vect(locs1), weights = T)
+    soil2 <- zonal(soil1, vect(locs1), weights = T)
   }
 
   # clean up
-  soil3 <- dplyr::mutate(soil2, id = locs$id) %>% dplyr::select(id, dplyr::everything())
+  soil3 <- mutate(soil2, id = locs$id) %>% select(.data$id, everything())
 
   colnames(soil3)[1] <- c(id.label)
 

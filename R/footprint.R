@@ -11,6 +11,12 @@
 #' @returns A data frame with summarized human footprint for each polygon in locs
 #' @export
 #'
+#' @importFrom rlang .data
+#' @importFrom geodata footprint
+#' @importFrom sf st_transform
+#' @importFrom terra crop zonal vect
+#' @importFrom dplyr mutate select
+#'
 #' @examples
 #' \dontrun{
 #' data(locs)
@@ -33,27 +39,26 @@ get_footprint <- function(locs,
   locs <- tmp$locs
 
   # get footprint map from geodata
-  footprint.map <- geodata::footprint(year = year,
+  footprint.map <- footprint(year = year,
                                       path = path)
 
-
   # Get things in order
-  locs1 <- sf::st_transform(locs, sf::st_crs(footprint.map))
+  locs1 <- st_transform(locs, st_crs(footprint.map))
 
   bb <- get_buffered_bbox(locs1)
-  foot1 <- terra::crop(footprint.map, bb)
+  foot1 <- crop(footprint.map, bb)
 
 
   cat("Extracting data\n")
   if (method == "fast") {
-    foot2 <- terra::zonal(foot1, terra::vect(locs1))
+    foot2 <- zonal(foot1, vect(locs1))
   } else if (method == "precise") {
-    foot2 <- terra::zonal(foot1, terra::vect(locs1), weights = T)
+    foot2 <- zonal(foot1, vect(locs1), weights = T)
   }
 
   # clean up
-  foot3 <- dplyr::mutate(foot2, id = locs$id) %>%
-            dplyr::select(id, `wildareas-v3-2009-human-footprint`)
+  foot3 <- mutate(foot2, id = locs$id) %>%
+            select(.data$id, .data$`wildareas-v3-2009-human-footprint`)
 
   colnames(foot3) <- c(id.label, "footprint")
 
