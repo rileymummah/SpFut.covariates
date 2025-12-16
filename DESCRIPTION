@@ -22,11 +22,12 @@ Imports:
     dplyr,
     geodata,
     magrittr,
+    rlang,
     stats,
     terra,
     tidyr,
     tidyselect
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Suggests: 
     knitr,
     rmarkdown,
@@ -37,4 +38,3 @@ Depends:
     sf
 URL: https://github.com/rileymummah/SpFut.covariates
 BugReports: https://github.com/rileymummah/SpFut.covariates/issues
-VignetteBuilder: knitr
