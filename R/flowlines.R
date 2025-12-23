@@ -67,7 +67,7 @@ get_flowlines <- function(locs,
   # Intersect national flowlines with grid
   st_intersection(g1, flowlines) %>%
     # Calculate stream length per grid and change to numeric
-    mutate(streamLength.m = st_length(),
+    mutate(streamLength.m = st_length(.),
                   streamLength.m = as.numeric(.data$streamLength.m)) -> tmp
 
   cat("Calculating total stream length and mean order\n")
