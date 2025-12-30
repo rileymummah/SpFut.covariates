@@ -87,7 +87,7 @@ get_flowlines <- function(locs,
 
   # Group by grid and stream order to calculate stream length by stream order
   tmp %>%
-    filter(FTYPE == "StreamRiver") %>%
+    filter(.data$FTYPE == "StreamRiver") %>%
     group_by(.data$id, .data$StreamOrde) %>%
     mutate(streamOrd = .data$StreamOrde,
            streamOrd.sum = sum(.data$streamLength.m)/1000) %>%
