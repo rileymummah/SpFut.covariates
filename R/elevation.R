@@ -124,7 +124,8 @@ get_elevation <- function(locs,
       group_by(.data$ID) %>%
       summarize(metric = .getmode(.data$aspect, ties_method = "random"))
 
-    ned$aspect.mode.random <- ind2$metric
+    if (nrow(ind2) != nrow(ned)) ned$aspect.mode.random <- NA
+    if (nrow(ind2) == nrow(ned)) ned$aspect.mode.random <- ind2$metric
 
     # % of pixels facing each direction
     dirs <- c("N", "NE", "E", "SE", "S", "SW", "W", "NW", "flat")

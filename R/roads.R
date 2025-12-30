@@ -61,7 +61,7 @@ get_roads <- function(locs,
   # Intersect roads with grid
   st_intersection(g1, roads) %>%
     # Calculate road length per grid and change to numeric
-    mutate(roadLength.m = st_length(),
+    mutate(roadLength.m = st_length(.),
                   roadLength.m = as.numeric(.data$roadLength.m)) %>%
     group_by(.data$id) %>%
     # By grid, calculate the total road length (km)
