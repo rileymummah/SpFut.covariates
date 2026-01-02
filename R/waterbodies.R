@@ -28,6 +28,11 @@ utils::globalVariables(".")
 
 get_waterbodies <- function(locs,
                             path,
+                            size = list(verysmall = c(0, 0.01),
+                                        small = c(0.01, 0.02),
+                                        medium = c(0.02, 0.05),
+                                        large = c(0.05, 10),
+                                        verylarge = c(10, Inf)),
                             id.label = "id") {
 
   tmp <- cleaning(locs, id.label, path)
@@ -67,18 +72,25 @@ get_waterbodies <- function(locs,
   lakepond$MeanDUsed[lakepond$MeanDUsed == -9998] <- NA
 
   # categorize each lake
-  lakepond <- mutate(lakepond, size = case_when(AREASQKM <= .01 ~ "verysmall",
-                                                AREASQKM > .01 &
-                                                  AREASQKM <= 0.02 ~ "small",
-                                                AREASQKM > 0.02 &
-                                                  AREASQKM <= 0.05 ~ "medium",
-                                                AREASQKM > 0.05 &
-                                                  AREASQKM <= 10 ~ "large",
-                                                AREASQKM > 10 ~ "verylarge"))
+  # lakepond <- mutate(lakepond, size = case_when(AREASQKM <= .01 ~ "verysmall",
+  #                                               AREASQKM > .01 &
+  #                                                 AREASQKM <= 0.02 ~ "small",
+  #                                               AREASQKM > 0.02 &
+  #                                                 AREASQKM <= 0.05 ~ "medium",
+  #                                               AREASQKM > 0.05 &
+  #                                                 AREASQKM <= 10 ~ "large",
+  #                                               AREASQKM > 10 ~ "verylarge"))
+  lakepond$size <- NA
+  for (s in 1:length(size)) {
+    lakepond$size[which(lakepond$AREASQKM >= size[[s]][1] & lakepond$AREASQKM < size[[s]][2])] <- names(size)[s]
+  }
+  lakepond <- filter(lakepond, is.na(size) == F)
+
   #table(lakepond$size)/nrow(lakepond)
   # These thresholds come from:
   #     this paper that I think defines ponds as <2ha (<0.02sqkm) Williams, P. J., J. Biggs, A. Crowe, J. Murphy, P. Nicolet, A. Weatherby, and M. Dunbar. 2010b. CS Technical Report No. 7/07 Countryside Survey: Ponds Report from 2007. Lancaster.
   #     somewhat even thresholds
+  # But as of 1/2/2026, custom thresholds can be used
 
   cat("Transforming\n")
   g1 <- st_transform(locs, st_crs(lakepond))
@@ -93,7 +105,20 @@ get_waterbodies <- function(locs,
           pivot_wider(names_from = .data$size,
                       values_from = c(.data$area, .data$n),
                       values_fill = 0)
-
+  
+  areacols <- paste0("area_", names(size))
+  for (a in 1:length(areacols)) {
+    if (areacols[a] %in% colnames(tmp) == F) {
+      tmp[,areacols[a]] <- 0
+    }
+  }
+  
+  ncols <- paste0("n_", names(size))
+  for (a in 1:length(ncols)) {
+    if (ncols[a] %in% colnames(tmp) == F) {
+      tmp[,ncols[a]] <- 0
+    }
+  }
 
   grid.covs <- g1 %>%
                 st_drop_geometry() %>%
