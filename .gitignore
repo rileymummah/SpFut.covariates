@@ -4,3 +4,10 @@
 .Ruserdata
 *.Rproj
 inst/doc
+
+
+# testing data
+data/NHDPlusNationalData
+data/elevation_tif
+data/land_cover_2020v2_30m_tif
+data/roads.gdb

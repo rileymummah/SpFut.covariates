@@ -153,7 +153,7 @@ get_elevation <- function(locs,
     }
 
 
-    ind2 <- select(ind2, .data$ID, all_of(dirs), .data$flat)
+    ind2 <- select(ind2, "ID", all_of(dirs), "flat")
 
     # add to ned_grid
     ned[(ncol(ned)+1):(ncol(ned)+length(dirs))] <- ind2[2:ncol(ind2)]
@@ -161,7 +161,7 @@ get_elevation <- function(locs,
   }
 
   ned$id <- locs1$id
-  all <- select(ned, .data$id, everything())
+  all <- select(ned, "id", everything())
 
   colnames(all)[1] <- id.label
 

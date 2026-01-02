@@ -1,6 +1,6 @@
 #' Roads
 #'
-#' @description Process US road data. Before running this function, you must download from \href{https://geodata.bts.gov/datasets/0b6c2fd2e3ac40a7929cdff1d4cf604a_0/explore}{Transportation.gov}. Unzip, rename the folder \emph{roads.gdb}, and call the path to the folder in the \code{get_roads()} function.
+#' @description Process US road data. Before running this function, you must download from \href{https://geodata.bts.gov/datasets/0b6c2fd2e3ac40a7929cdff1d4cf604a_0/explore}{Transportation.gov}. Unzip, rename the folder to \emph{roads.gdb}, and call the path to the folder in the \code{get_roads()} function.
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param path (character) Path to location of data to extract
@@ -64,13 +64,13 @@ get_roads <- function(locs,
   st_intersection(g1, roads) %>%
     # Calculate road length per grid and change to numeric
     mutate(roadLength.m = st_length(.),
-                  roadLength.m = as.numeric(.data$roadLength.m)) %>%
+           roadLength.m = as.numeric(.data$roadLength.m)) %>%
     group_by(.data$id) %>%
     # By grid, calculate the total road length (km)
     summarize(roadLength.km = sum(.data$roadLength.m, na.rm=T)/1000) %>%
     # Drop the flowline geometry
     st_drop_geometry() %>%
-    select(.data$id, .data$roadLength.km) -> grid.covs
+    select("id", "roadLength.km") -> grid.covs
 
 
   # Join with locs
@@ -80,7 +80,7 @@ get_roads <- function(locs,
               full_join(grid.covs, by = "id")
   roads1[is.na(roads1)] <- 0
 
-  roads2 <- select(roads1, all_of(id.label), .data$roadLength.km)
+  roads2 <- select(roads1, all_of(id.label), "roadLength.km")
 
   return(roads2)
 

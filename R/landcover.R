@@ -3,7 +3,7 @@
 #' @description Process US landcover data. Before running this function, you must download the USA landcover data from \url{http://www.cec.org/north-american-environmental-atlas/land-cover-30m-2020/}. Call the path to the \emph{usa_land_cover_2020_30m_tif} folder in the \code{get_landcover()} function.
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
-#' @param path (character) Path to location of data to extract
+#' @param path (character) Path to `land_cover_2020v2_30m_tif`
 #' @param id.label (character) Column name of location ID
 #' @param res.fact (positive integer) Input for \pkg{terra}::\code{aggregate()}. Aggregation factor expressed as number of cells in each direction (horizontally and vertically). Or two integers (horizontal and vertical aggregation factor) or three integers (when also aggregating over layers).
 #'
@@ -99,12 +99,8 @@ get_landcover <- function(locs,
 
   # Organize
   all1[,id.label] <- as.data.frame(locs1)[,id.label]
-  all1 <- select(all1, !.data$ID) %>%
+  all1 <- select(all1, !"ID") %>%
     select(all_of(id.label), everything())
-
-  # all1 <- all1 %>%
-  #   select(all_of(id.label), all_of(as.character(1:19)))
-  # all1[is.na(all1)] <- 0
 
   total <- rowSums(all1[,2:20])
   all1[,2:20] <- all1[,2:20]/total

@@ -9,7 +9,7 @@ get_landcover(locs, path, id.label = "id", res.fact = 10)
 \arguments{
 \item{locs}{(sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)}
 
-\item{path}{(character) Path to location of data to extract}
+\item{path}{(character) Path to `land_cover_2020v2_30m_tif`}
 
 \item{id.label}{(character) Column name of location ID}
 
