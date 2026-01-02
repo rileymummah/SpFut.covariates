@@ -1,6 +1,8 @@
-test_that("multiplication works", {
+test_that("download climate works", {
 
-  # data(locs)
+  data(locs)
 
-  # dat <- get_climate(locs[1:5,], "grid.id")
+  dat <- get_climate(locs[1:3,], "grid.id")
+
+  expect_equal(class(dat), 'data.frame')
 })

@@ -67,7 +67,7 @@ get_soil <- function(locs,
   }
 
   # clean up
-  soil3 <- mutate(soil2, id = locs$id) %>% select(.data$id, everything())
+  soil3 <- mutate(soil2, id = locs$id) %>% select("id", everything())
 
   colnames(soil3)[1] <- c(id.label)
 

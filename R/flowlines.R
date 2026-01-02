@@ -10,6 +10,7 @@
 #' @export
 #'
 #' @importFrom rlang .data
+#' @importFrom utils globalVariables
 #' @importFrom stats weighted.mean
 #' @importFrom tidyselect all_of
 #' @importFrom sf st_read st_zm st_transform st_crs st_intersection st_length st_drop_geometry
@@ -22,6 +23,8 @@
 #'
 #' get_flowlines(locs, path = 'data/', id.label = 'grid.id')
 #' }
+
+utils::globalVariables(".")
 
 get_flowlines <- function(locs,
                           path,
@@ -68,7 +71,7 @@ get_flowlines <- function(locs,
   st_intersection(g1, flowlines) %>%
     # Calculate stream length per grid and change to numeric
     mutate(streamLength.m = st_length(.),
-                  streamLength.m = as.numeric(.data$streamLength.m)) -> tmp
+           streamLength.m = as.numeric(.data$streamLength.m)) -> tmp
 
   cat("Calculating total stream length and mean order\n")
 
@@ -95,8 +98,8 @@ get_flowlines <- function(locs,
     st_drop_geometry() %>%
     select(.data$id, .data$streamOrd, .data$streamOrd.sum) %>%
     distinct() %>%
-    tidyr::pivot_wider(id_cols = .data$id, names_from = .data$streamOrd,
-                       names_prefix = 'streamOrd', values_from = .data$streamOrd.sum) %>% # in km
+    pivot_wider(id_cols = .data$id, names_from = .data$streamOrd,
+                names_prefix = 'streamOrd', values_from = .data$streamOrd.sum) %>% # in km
     #select(all_of(id.use), paste0('streamOrd',1:max(tmp$StreamOrde, na.rm=T)), streamOrdNA) %>%
     arrange(.data$id) -> tmp2
 

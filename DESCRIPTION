@@ -26,7 +26,8 @@ Imports:
     stats,
     terra,
     tidyr,
-    tidyselect
+    tidyselect,
+    utils
 RoxygenNote: 7.3.3
 Suggests: 
     knitr,

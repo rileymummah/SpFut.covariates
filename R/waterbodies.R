@@ -10,6 +10,7 @@
 #' @export
 #'
 #' @importFrom rlang .data
+#' @importFrom utils globalVariables
 #' @importFrom magrittr "%>%"
 #' @importFrom sf st_read st_transform st_zm st_crs st_intersection st_drop_geometry st_area
 #' @importFrom tidyselect all_of
@@ -22,6 +23,8 @@
 #'
 #' get_waterbodies(locs, path = 'data/', id.label = 'grid.id')
 #' }
+
+utils::globalVariables(".")
 
 get_waterbodies <- function(locs,
                             path,

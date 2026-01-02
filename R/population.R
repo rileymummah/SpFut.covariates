@@ -42,8 +42,8 @@ get_population <- function(locs,
 
   # get population map from geodata
   population.map <- population(year = year,
-                                        res = res,
-                                        path = path)
+                               res = res,
+                               path = path)
 
   # Get things in order
   locs1 <- st_transform(locs, crs = st_crs(population.map))
@@ -62,7 +62,7 @@ get_population <- function(locs,
 
   # clean up
   pop3 <- mutate(pop2, id = locs$id)
-  pop3 <- select(pop3, .data$id, .data$population_density)
+  pop3 <- select(pop3, "id", "population_density")
 
   colnames(pop3) <- c(id.label, "density")
 

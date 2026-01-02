@@ -64,7 +64,7 @@ get_traveltime <- function(locs,
 
   # clean up
   travel3 <- mutate(travel2, id = locs$id) %>%
-    select(.data$id, .data$`travel_time_to_cities_1`)
+    select("id", "travel_time_to_cities_1")
 
   colnames(travel3) <- c(id.label, "traveltime")
 

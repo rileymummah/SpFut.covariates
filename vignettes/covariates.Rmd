@@ -10,7 +10,8 @@ vignette: >
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  cache = TRUE
 )
 ```
 
@@ -43,40 +44,66 @@ id.label <- "grid.id"
 ```
 
 
+Download data for population density, human footprint, travel time to nearest city, soil composition, and climate data do not require additional datasets, so we'll start by downloading these data first.
+
+```{r download-easy}
 ## Population density
-dat <- get_population(locs, id.label)
+pop <- get_population(locs, id.label)
+
+pop
 
 ## Human footprint
-dat <- get_footprint(locs, id.label)
+foot <- get_footprint(locs, id.label)
+
+foot
 
 ## Traveltime
-dat <- get_traveltime(locs, id.label)
+travel <- get_traveltime(locs, id.label)
+
+travel
 
 ## Soil composition
-dat <- get_soil(locs, id.label)
+soil <- get_soil(locs, id.label)
+
+soil
 
 ## Climate
-dat <- get_climate(locs, id.label)
+clim <- get_climate(locs, id.label)
 
+clim
+```
 
 # Download data
 
 If you intend to use any of the following function, you must first download external datasets as instructed in the documentation.
 
 ## Landcover
-dat <- get_landcover(locs, path, id.label)
+land <- get_landcover(locs, path, id.label)
+
+land
 
 ## Elevation
-dat <- get_elevation(locs, path, id.label)
+elev <- get_elevation(locs, path, id.label)
+
+elev
 
 ## Protected areas
-dat <- get_protected(locs, path, id.label)
+protect <- get_protected(locs, path, id.label)
+
+protect
 
 ## Flowlines
-dat <- get_flowlines(locs, path, id.label)
+flow <- get_flowlines(locs, path, id.label)
+
+flow
 
 ## Water bodies
-dat <- get_waterbodies(locs, path, id.label)
+water <- get_waterbodies(locs, path, id.label)
+
+water
 
 ## Roads
-dat <- get_roads(locs, path, id.label)
+road <- get_roads(locs, path, id.label)
+
+road
+

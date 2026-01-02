@@ -143,7 +143,7 @@ get_elevation <- function(locs,
                                                      aspect < 0 ~ "flat")) %>%
                 group_by(.data$ID, .data$direction) %>%
                 summarize(metric = sum(.data$weight), .groups = "drop") %>%
-                tidyr::pivot_wider(values_from = .data$metric, names_from = .data$direction)
+                pivot_wider(values_from = .data$metric, names_from = .data$direction)
     ind2$`NA` <- NULL
 
     # make sure all directions are in df

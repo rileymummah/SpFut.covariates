@@ -10,6 +10,7 @@
 #' @export
 #'
 #' @importFrom rlang .data
+#' @importFrom utils globalVariables
 #' @importFrom magrittr "%>%"
 #' @importFrom tidyselect all_of
 #' @importFrom sf st_layers st_read st_transform st_intersection st_drop_geometry st_length
@@ -22,6 +23,7 @@
 #' get_roads(locs, path = 'data/', id.label = 'grid.id')
 #' }
 
+utils::globalVariables(".")
 
 get_roads <- function(locs,
                       path,

@@ -58,7 +58,7 @@ get_footprint <- function(locs,
 
   # clean up
   foot3 <- mutate(foot2, id = locs$id) %>%
-            select(.data$id, .data$`wildareas-v3-2009-human-footprint`)
+            select("id", "wildareas-v3-2009-human-footprint")
 
   colnames(foot3) <- c(id.label, "footprint")
 
