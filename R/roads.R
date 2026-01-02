@@ -23,7 +23,6 @@
 #' get_roads(locs, path = 'data/', id.label = 'grid.id')
 #' }
 
-utils::globalVariables(".")
 
 get_roads <- function(locs,
                       path,

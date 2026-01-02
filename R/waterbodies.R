@@ -24,7 +24,6 @@
 #' get_waterbodies(locs, path = 'data/', id.label = 'grid.id')
 #' }
 
-utils::globalVariables(".")
 
 get_waterbodies <- function(locs,
                             path,
@@ -105,14 +104,14 @@ get_waterbodies <- function(locs,
           pivot_wider(names_from = .data$size,
                       values_from = c(.data$area, .data$n),
                       values_fill = 0)
-  
+
   areacols <- paste0("area_", names(size))
   for (a in 1:length(areacols)) {
     if (areacols[a] %in% colnames(tmp) == F) {
       tmp[,areacols[a]] <- 0
     }
   }
-  
+
   ncols <- paste0("n_", names(size))
   for (a in 1:length(ncols)) {
     if (ncols[a] %in% colnames(tmp) == F) {
@@ -123,7 +122,7 @@ get_waterbodies <- function(locs,
   grid.covs <- g1 %>%
                 st_drop_geometry() %>%
                 full_join(tmp, by = "id") %>%
-                replace(is.na(.), 0) %>%
+                replace(is.na(.data), 0) %>%
                 select(all_of(id.label), starts_with("area_"), starts_with("n_"))
 
 
