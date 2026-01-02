@@ -112,20 +112,20 @@ get_elevation <- function(locs,
 
 
   if (sum(ind.aspect$aspect, na.rm = T) != 0) {
-    # mode aspect of pixels (if there is a tie, get mean)
-    ind2 <-  ind.aspect %>%
-      group_by(.data$ID) %>%
-      summarize(metric = .getmode(.data$aspect, ties_method = "mean"))
-
-    ned$aspect.mode.mean <- ind2$metric
-
-    # mode aspect of pixels (if there is a tie, get random)
-    ind2 <- ind.aspect %>%
-      group_by(.data$ID) %>%
-      summarize(metric = .getmode(.data$aspect, ties_method = "random"))
-
-    if (nrow(ind2) != nrow(ned)) ned$aspect.mode.random <- NA
-    if (nrow(ind2) == nrow(ned)) ned$aspect.mode.random <- ind2$metric
+    # # mode aspect of pixels (if there is a tie, get mean)
+    # ind2 <-  ind.aspect %>%
+    #   group_by(.data$ID) %>%
+    #   summarize(metric = .getmode(.data$aspect, ties_method = "mean"))
+    # 
+    # ned$aspect.mode.mean <- ind2$metric
+    # 
+    # # mode aspect of pixels (if there is a tie, get random)
+    # ind2 <- ind.aspect %>%
+    #   group_by(.data$ID) %>%
+    #   summarize(metric = .getmode(.data$aspect, ties_method = "random"))
+    # 
+    # if (nrow(ind2) != nrow(ned)) ned$aspect.mode.random <- NA
+    # if (nrow(ind2) == nrow(ned)) ned$aspect.mode.random <- ind2$metric
 
     # % of pixels facing each direction
     dirs <- c("N", "NE", "E", "SE", "S", "SW", "W", "NW", "flat")
