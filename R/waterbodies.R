@@ -123,9 +123,9 @@ get_waterbodies <- function(locs,
   grid.covs <- g1 %>%
                 st_drop_geometry() %>%
                 full_join(tmp, by = "id") %>%
-                replace(is.na(.data), 0) %>%
+                #replace(is.na(.data), 0) %>%
                 select(all_of(id.label), starts_with("area_"), starts_with("n_"))
-
+  grid.covs[is.na(grid.covs)] <- 0
 
   return(grid.covs)
 
