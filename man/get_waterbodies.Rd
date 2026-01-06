@@ -17,6 +17,8 @@ get_waterbodies(
 
 \item{path}{(character) Path to location of data to extract}
 
+\item{size}{(list) A list of labeled thresholds to categorize waterbody size}
+
 \item{id.label}{(character) Column name of location ID}
 }
 \value{

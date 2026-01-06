@@ -38,9 +38,8 @@ get_protected <- function(locs,
 
   pad <- st_read(paste0(path, "/PADUS4_0Geodatabase/PADUS4_0_Geodatabase.gdb/"),
                      layer='PADUS4_0Designation') %>%
-
-        # Drop Z or M dimension
-        st_zm()
+          # Drop Z or M dimension
+          st_zm()
 
   # these are good
   valid <- pad[which(st_is_valid(pad) == T),]
@@ -69,7 +68,7 @@ get_protected <- function(locs,
   cat("Warning: There are ", nrow(other), " shapes that are not useable")
 
   # project locs
-  g1 <- select(locs, .data$id, .data$geometry) %>%
+  g1 <- select(locs, "id", "geometry") %>%
           st_transform(st_crs(pad))
   bb <- get_buffered_bbox(g1)
 
@@ -77,7 +76,8 @@ get_protected <- function(locs,
   pad1 <- bind_rows(valid, invalid1) %>% st_crop(bb)
 
   if (nrow(pad1) == 0) {
-    allnms <- paste0("protected.", c("FED", "LOC", "UNK", "STAT", "NGO", "DIST", "PVT", "JNT", "TRIB", "TOT"))
+    allnms <- paste0("protected.", c("FED", "LOC", "UNK", "STAT", "NGO", "DIST",
+                                     "PVT", "JNT", "TRIB", "TOT"))
 
     g2 <- as.data.frame(matrix(ncol = length(allnms),
                                nrow = nrow(g1),
@@ -86,7 +86,7 @@ get_protected <- function(locs,
 
     g2$id <- g1$id
 
-    g2 <- select(g2, .data$id, all_of(allnms))
+    g2 <- select(g2, "id", all_of(allnms))
 
   } else {
 
@@ -106,7 +106,7 @@ get_protected <- function(locs,
 
     g2 <- full_join(g1, as.data.frame(tmp), by = "id") %>%
             st_drop_geometry() %>%
-            tidyr::pivot_wider(names_from = .data$Mang_Type, values_from = .data$protected)
+            pivot_wider(names_from = .data$Mang_Type, values_from = .data$protected)
 
     g2$`NA` <- NULL
 
@@ -117,7 +117,6 @@ get_protected <- function(locs,
 
     g2 <- locs %>%
             st_drop_geometry() %>%
-            #select(id) %>%
             full_join(g2, by = "id")
 
     # make sure all columns exist
@@ -134,7 +133,7 @@ get_protected <- function(locs,
 
     g2[is.na(g2)] <- 0
 
-    g2 <- select(g2, all_of(id.label), tidyselect::starts_with("protected."))
+    g2 <- select(g2, all_of(id.label), starts_with("protected."))
 
 
   }

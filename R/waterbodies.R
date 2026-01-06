@@ -5,6 +5,7 @@
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param path (character) Path to location of data to extract
 #' @param id.label (character) Column name of location ID
+#' @param size (list) A list of labeled thresholds to categorize waterbody size
 #'
 #' @returns A data frame with summarized waterbodies for each polygon in locs
 #' @export
@@ -62,7 +63,7 @@ get_waterbodies <- function(locs,
 
   cat("Loading waterbody file\n")
   lakepond <- readRDS(paste0(path,'/NHDPlusNationalData/waterbody.rds')) %>%
-    filter(.data$FTYPE == "LakePond")
+                filter(.data$FTYPE == "LakePond")
 
   # assuming -9998 means NA
   lakepond$MeanDepth[lakepond$MeanDepth == -9998] <- NA
@@ -83,7 +84,7 @@ get_waterbodies <- function(locs,
   for (s in 1:length(size)) {
     lakepond$size[which(lakepond$AREASQKM >= size[[s]][1] & lakepond$AREASQKM < size[[s]][2])] <- names(size)[s]
   }
-  lakepond <- filter(lakepond, is.na(size) == F)
+  lakepond <- filter(lakepond, is.na(.data$size) == F)
 
   #table(lakepond$size)/nrow(lakepond)
   # These thresholds come from:
@@ -101,8 +102,8 @@ get_waterbodies <- function(locs,
           group_by(.data$id, .data$size) %>%
           summarize(area = as.numeric(sum(.data$area)), .groups = "drop", n = n()) %>%
           st_drop_geometry() %>%
-          pivot_wider(names_from = .data$size,
-                      values_from = c(.data$area, .data$n),
+          pivot_wider(names_from = "size",
+                      values_from = c("area", "n"),
                       values_fill = 0)
 
   areacols <- paste0("area_", names(size))

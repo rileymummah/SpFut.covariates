@@ -4,7 +4,6 @@
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param id.label (character) Column name of location ID
-#' @param to (character) Required argument for \pkg{geodata}::\code{travel_time()}. Valid options are "city" or "port"
 #' @param size (numeric) Required argument for \pkg{geodata}::\code{travel_time()}. A positive integer indicating the size of the city or port. Can be between 1 and 9 if to="city" or between 1 and 5 if to="port".
 #' @param up (logical) Required argument for \pkg{geodata}::\code{travel_time()}. If TRUE the travel time to a city of the size chosen or larger is returned.
 #' @param path (character) Path to location of data to extract
@@ -29,7 +28,6 @@
 
 get_traveltime <- function(locs,
                            id.label,
-                           to = "city",
                            size = 4,
                            up = T,
                            path = tempdir(),
@@ -43,7 +41,7 @@ get_traveltime <- function(locs,
   locs <- tmp$locs
 
   # get traveltime map from geodata
-  travel.map <- travel_time(to = to,
+  travel.map <- travel_time(to = "city",
                             size = size,
                             up = up,
                             path = path)
@@ -64,7 +62,7 @@ get_traveltime <- function(locs,
 
   # clean up
   travel3 <- mutate(travel2, id = locs$id) %>%
-    select("id", "travel_time_to_cities_1")
+              select("id", contains("travel_time_to_cities"))
 
   colnames(travel3) <- c(id.label, "traveltime")
 

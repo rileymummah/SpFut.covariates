@@ -95,10 +95,10 @@ get_flowlines <- function(locs,
            streamOrd.sum = sum(.data$streamLength.m)/1000) %>%
     ungroup() %>%
     st_drop_geometry() %>%
-    select(.data$id, .data$streamOrd, .data$streamOrd.sum) %>%
+    select("id", "streamOrd", "streamOrd.sum") %>%
     distinct() %>%
-    pivot_wider(id_cols = .data$id, names_from = .data$streamOrd,
-                names_prefix = 'streamOrd', values_from = .data$streamOrd.sum) %>% # in km
+    pivot_wider(id_cols = "id", names_from = "streamOrd",
+                names_prefix = 'streamOrd', values_from = "streamOrd.sum") %>% # in km
     #select(all_of(id.use), paste0('streamOrd',1:max(tmp$StreamOrde, na.rm=T)), streamOrdNA) %>%
     arrange(.data$id) -> tmp2
 

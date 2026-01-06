@@ -7,7 +7,6 @@
 get_traveltime(
   locs,
   id.label,
-  to = "city",
   size = 4,
   up = T,
   path = tempdir(),
@@ -18,8 +17,6 @@ get_traveltime(
 \item{locs}{(sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)}
 
 \item{id.label}{(character) Column name of location ID}
-
-\item{to}{(character) Required argument for \pkg{geodata}::\code{travel_time()}. Valid options are "city" or "port"}
 
 \item{size}{(numeric) Required argument for \pkg{geodata}::\code{travel_time()}. A positive integer indicating the size of the city or port. Can be between 1 and 9 if to="city" or between 1 and 5 if to="port".}
 
