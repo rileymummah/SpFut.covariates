@@ -18,7 +18,7 @@ get_traveltime(
 
 \item{id.label}{(character) Column name of location ID}
 
-\item{size}{(numeric) Required argument for \pkg{geodata}::\code{travel_time()}. A positive integer indicating the size of the city or port. Can be between 1 and 9 if to="city" or between 1 and 5 if to="port".}
+\item{size}{(numeric) Required argument for \pkg{geodata}::\code{travel_time()}. A positive integer indicating the size of the city. Can be between 1 and 9 if to="city".}
 
 \item{up}{(logical) Required argument for \pkg{geodata}::\code{travel_time()}. If TRUE the travel time to a city of the size chosen or larger is returned.}
 

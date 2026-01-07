@@ -45,66 +45,131 @@ id.label <- "grid.id"
 ```
 
 
-Download data for population density, human footprint, travel time to nearest city, soil composition, and climate data do not require additional datasets, so we'll start by downloading these data first.
+Download data for population density, human footprint, travel time to nearest city, soil composition, and climate data do not require additional datasets, so we'll start by downloading these data first. All functions take `locs`, `id.label`, and `path` as inputs. The `path` argument refers to a temporary directory where the desired data are downloaded for processing. Any additional inputs are shown with default values. 
 
-```{r download-easy}
+The `get_population` function take 3 additional inputs: `year`, `res`, and `method`. The argument `year` refers to the year of the population data; valid values are 2000, 2005, 2010, 2015, and 2020. The `res` argument refers to the resolution for `geodata::population()`. Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree). The `method` argument refers to the preferred method to extract data using `terra::extract()`. Valid methods are "fast" or "precise".
+
+```{r population}
 ## Population density
-pop <- get_population(locs, id.label)
+pop <- get_population(locs, id.label, path = tempdir(), 
+                      year = 2010, res = 0.5, method = "fast")
 
 pop
+```
 
+The `get_footprint` function takes 2 additional inputs: `year` and `method`. The argument `year` refers to the year of the footprint data and takes two values: 1993 or 2009. The `method` argument refers to the preferred method to extract data using `terra::extract()`. Valid methods are "fast" or "precise".
+
+```{r footprint}
 ## Human footprint
-foot <- get_footprint(locs, id.label)
+foot <- get_footprint(locs, id.label, path = tempdir(), 
+                      year = 2009, method = "fast")
 
 foot
+```
 
+The `get_traveltime` function takes 3 additional inputs: `size`, `up`, and `method`. The argument `size` requires a positive integer between 1 and 9 that refers to the size of the city in the `geodata::travel_time()` function. The `up` argument refers to whether the travel time to a city of size `size` and up should be returned (TRUE) or not (FALSE). The `method` argument refers to the preferred method to extract data using `terra::extract()`. Valid methods are "fast" or "precise".
+
+```{r traveltime}
 ## Traveltime
-travel <- get_traveltime(locs, id.label)
+travel <- get_traveltime(locs, id.label, path = tempdir(),
+                         size = 4, up = T, method = "fast")
 
 travel
+```
 
+The `get_soil` function takes 5 additional inputs: `var`, `depth`, `stat`, `name`, and `method`. The argument `var` refers to variables names for the function geodata::soil_world()  and takes the following values: "bdod", "cfvo", "clay", "nitrogen", "ocd", "ocs", "phh2o", "sand", "silt", "soc", "wrb". The `depth` argument refers to depth ranges of 0-5, 5-15, 15-30, 30-60, 60-100, and 100-200cm by taking the values 5, 15, 30, 60, 100, and 200, respectively. The `stat` argument refers to how to summarize the depth data via "mean", "uncertainty", "Q0.05", "Q0.5", or "Q0.95". The `name` argument refers to one of the following: "Acrisols", "Albeluvisols", "Alisols", "Andosols", "Arenosols", "Calcisols", "Cambisols", "Chernozems", "Cryosols", "Durisols", "Ferralsols", "Fluvisols", "Gleysols", "Gypsisols", "Histosols", "Kastanozems", "Leptosols", "Lixisols", "Luvisols", "Nitisols", "Phaeozems", "Planosols", "Plinthosols", "Podzols", "Regosols", "Solonchaks", "Solonetz", "Stagnosols", "Umbrisols", and "Vertisols", but is only used when var="wrb". The `method` argument refers to the preferred method to extract data using `terra::extract()`. Valid methods are "fast" or "precise".
+
+```{r soil}
 ## Soil composition
-soil <- get_soil(locs, id.label)
+soil <- get_soil(locs, id.label, path = tempdir(),
+                 var = c("bdod", "cfvo", "clay", "nitrogen", "ocd",
+                         "phh2o", "sand", "silt", "soc"),
+                 depth = 5, stat = "mean", name = "", method = "fast")
 
 soil
+```
 
+The `get_climate` function takes 2 additional inputs: `res` and `method`. The argument `res` refers to the resolution of the climate data and takes the following values:  10, 5, 2.5, and 0.5 (minutes of a degree). The `method` argument refers to the preferred method to extract data using `terra::extract()`. Valid methods are "fast" or "precise".
+
+#' @param res (numeric) Required argument for \pkg{geodata}::\code{worldclim_global()}. Valid resolutions are 10, 5, 2.5, and 0.5 (minutes of a degree).
+
+```{r climate}
 ## Climate
-clim <- get_climate(locs, id.label)
+clim <- get_climate(locs, id.label, path = tempdir(),
+                    res = 0.5, method = "fast")
 
 clim
 ```
+
+
 
 # Download data
 
 If you intend to use any of the following function, you must first download external datasets as instructed in the documentation.
 
+
+To download landcover data, first download the TIF from http://www.cec.org/north-american-environmental-atlas/land-cover-30m-2020/. Unzip the folder and move it to a desired location. Use the path to the folder `land_cover_2020v2_30m_tif` as an input to the `get_landcover` function.
+
+The `res.fact` argument of the `get_landcover` function refers an aggregation factor for `terra::aggregate()`. The aggregation factor is a positive integer expressed as number of cells in each direction (horizontally and vertically), as two positive integers (horizontal and vertical aggregation factor), or three positive integers (when also aggregating over layers).
+
+```{r landcover}
 ## Landcover
-land <- get_landcover(locs, path, id.label)
+land <- get_landcover(locs, path, id.label, res.fact = 10)
 
 land
+```
 
+To download elevation data, first download the TIF from http://www.cec.org/north-american-environmental-atlas/elevation-2023/. Unzip the folder and move it to a desired location. Use the path to the folder `elevation_tif` as an input to the `get_elevation` function.
+
+The `method` argument of the `get_elevation` function refers to the method to extract data using `terra::extract()`. The valid options for methods are "fast" and "precise".
+
+```{r elevation}
 ## Elevation
-elev <- get_elevation(locs, path, id.label)
+elev <- get_elevation(locs, path, id.label, method = 'fast')
 
 elev
+```
 
+To download protected area data, first download PADUS4_0Geodatabase.zip from https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-download. Unzip the folder and move it to a desired location. Use the path to the folder `PADUS4_0Geodatabase` as an input to the `get_protected` function.
+
+```{r protected-areas}
 ## Protected areas
 protect <- get_protected(locs, path, id.label)
 
 protect
+```
 
-## Flowlines
-flow <- get_flowlines(locs, path, id.label)
-
-flow
-
-## Water bodies
-water <- get_waterbodies(locs, path, id.label)
-
-water
-
+To download road data, first download from https://geodata.bts.gov/datasets/0b6c2fd2e3ac40a7929cdff1d4cf604a_0/explore?location=23.778950%2C70.504834%2C3.54. Unzip the folder and move it to a desired location. Rename the folder `roads.gdb` and use the path as an input to the `get_roads` function. 
+  
+```{r roads}
 ## Roads
 road <- get_roads(locs, path, id.label)
 
 road
+```
+
+To download flowline and waterbody data, first download `NHDPlusV21_NationalData_Seamless_Geodatabase_Lower48_07.7z` from https://www.epa.gov/waterdata/nhdplus-national-data. Unzip the folder and move it to a desired location. Use the path to the folder `NHDPlusNationalData` as an input to the `get_flowlines` or `get_waterbodies` functions.
+
+The first time either the `get_flowlines` or `get_waterbodies` functions are run, a pre-processing step will be performed to generate `flowlines.rds` or `waterbody.rds`, respectively, which will be saved in the `NHDPlusNationalData` folder.
+
+```{r flowlines}
+## Flowlines
+flow <- get_flowlines(locs, path, id.label)
+
+flow
+```
+
+The `get_waterbodes` function has an additional input which defines the bin thresholds for different sizes of waterbodies. The default is shown below.
+
+```{r waterbodies}
+## Water bodies
+water <- get_waterbodies(locs, path, id.label, size = list(verysmall = c(0, 0.01),
+                                                           small = c(0.01, 0.02),
+                                                           medium = c(0.02, 0.05),
+                                                           large = c(0.05, 10),
+                                                           verylarge = c(10, Inf)),)
+
+water
+```
+
 

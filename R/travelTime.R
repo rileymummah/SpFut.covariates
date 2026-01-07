@@ -4,7 +4,7 @@
 #'
 #' @param locs (sf) Polygons for which to summarize covariates (should be grid cells, watersheds, or buffered points)
 #' @param id.label (character) Column name of location ID
-#' @param size (numeric) Required argument for \pkg{geodata}::\code{travel_time()}. A positive integer indicating the size of the city or port. Can be between 1 and 9 if to="city" or between 1 and 5 if to="port".
+#' @param size (numeric) Required argument for \pkg{geodata}::\code{travel_time()}. A positive integer indicating the size of the city. Can be between 1 and 9 if to="city".
 #' @param up (logical) Required argument for \pkg{geodata}::\code{travel_time()}. If TRUE the travel time to a city of the size chosen or larger is returned.
 #' @param path (character) Path to location of data to extract
 #' @param method (character) Method to extract data using \pkg{terra}::\code{extract()}. Valid methods are "fast" and "precise"
@@ -16,7 +16,7 @@
 #' @importFrom geodata travel_time
 #' @importFrom sf st_transform st_crs
 #' @importFrom terra crop zonal vect
-#' @importFrom dplyr mutate select
+#' @importFrom dplyr mutate select contains
 #'
 #' @examples
 #' \dontrun{

@@ -35,11 +35,12 @@ get_protected <- function(locs,
     stop("Protected areas file does not exist. \nStep 1: Download PADUS4_0Geodatabase.zip from https://www.usgs.gov/programs/gap-analysis-project/science/pad-us-data-download \nStep 2: Unzip, move PADUS4_0Geodatabase folder to path, and try again")
   }
 
-
-  pad <- st_read(paste0(path, "/PADUS4_0Geodatabase/PADUS4_0_Geodatabase.gdb/"),
-                     layer='PADUS4_0Designation') %>%
-          # Drop Z or M dimension
-          st_zm()
+  suppressWarnings(
+    pad <- st_read(paste0(path, "/PADUS4_0Geodatabase/PADUS4_0_Geodatabase.gdb/"),
+                       layer='PADUS4_0Designation') %>%
+            # Drop Z or M dimension
+            st_zm()
+  )
 
   # these are good
   valid <- pad[which(st_is_valid(pad) == T),]

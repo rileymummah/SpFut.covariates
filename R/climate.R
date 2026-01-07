@@ -41,7 +41,6 @@ get_climate <- function(locs,
   locs <- tmp$locs
 
 
-
   # download rasters
   tmin.map <- worldclim_global(res = res,
                                var = "tmin",

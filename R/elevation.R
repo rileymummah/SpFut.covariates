@@ -63,13 +63,13 @@ get_elevation <- function(locs,
     ned <- zonal(sub,
                  vect(locs1),
                  na.rm = T) %>%
-      rename(elevation = .data$northamerica_elevation_cec_2023)
+      rename(elevation = "northamerica_elevation_cec_2023")
   } else {
     ned <- zonal(sub,
                  vect(locs1),
                  na.rm = T,
                  weights = T) %>%
-      rename(elevation = .data$northamerica_elevation_cec_2023)
+      rename(elevation = "northamerica_elevation_cec_2023")
   }
 
 
@@ -116,14 +116,14 @@ get_elevation <- function(locs,
     # ind2 <-  ind.aspect %>%
     #   group_by(.data$ID) %>%
     #   summarize(metric = .getmode(.data$aspect, ties_method = "mean"))
-    # 
+    #
     # ned$aspect.mode.mean <- ind2$metric
-    # 
+    #
     # # mode aspect of pixels (if there is a tie, get random)
     # ind2 <- ind.aspect %>%
     #   group_by(.data$ID) %>%
     #   summarize(metric = .getmode(.data$aspect, ties_method = "random"))
-    # 
+    #
     # if (nrow(ind2) != nrow(ned)) ned$aspect.mode.random <- NA
     # if (nrow(ind2) == nrow(ned)) ned$aspect.mode.random <- ind2$metric
 
@@ -143,7 +143,7 @@ get_elevation <- function(locs,
                                                      aspect < 0 ~ "flat")) %>%
                 group_by(.data$ID, .data$direction) %>%
                 summarize(metric = sum(.data$weight), .groups = "drop") %>%
-                pivot_wider(values_from = .data$metric, names_from = .data$direction)
+                pivot_wider(values_from = "metric", names_from = "direction")
     ind2$`NA` <- NULL
 
     # make sure all directions are in df

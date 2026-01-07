@@ -40,7 +40,7 @@ get_footprint <- function(locs,
 
   # get footprint map from geodata
   footprint.map <- footprint(year = year,
-                                      path = path)
+                             path = path)
 
   # Get things in order
   locs1 <- st_transform(locs, st_crs(footprint.map))
