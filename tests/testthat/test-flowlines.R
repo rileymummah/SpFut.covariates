@@ -1,10 +1,12 @@
 test_that("download flowlines works", {
   data(locs)
 
-  expect_true(file.exists('../../../species-futures/data/USA/NHDPlusNationalData/waterbody.rds'))
+  path <- 'C:/Users/rmummah/OneDrive - DOI/Documents/GitHub/species-futures/data/USA/'
+
+  expect_true(file.exists(paste0(path, 'NHDPlusNationalData/waterbody.rds')))
 
   expect_warning(get_waterbodies(locs[1:3,],
-                                 path = '../../../species-futures/data/USA/',
+                                 path = path,
                                  id.label = "grid.id"))
 
 })

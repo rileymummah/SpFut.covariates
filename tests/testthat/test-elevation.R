@@ -2,10 +2,12 @@ test_that("download elevation works", {
 
   data(locs)
 
-  expect_true(file.exists('../../../species-futures/data/USA/elevation_tif'))
+  path <- 'C:/Users/rmummah/OneDrive - DOI/Documents/GitHub/species-futures/data/USA/'
+
+  expect_true(file.exists(paste0(path,'elevation_tif')))
 
   dat <- get_elevation(locs[1:3,],
-                       path = '../../../species-futures/data/USA/',
+                       path = path,
                        id.label = 'grid.id',
                        method = "fast")
 
