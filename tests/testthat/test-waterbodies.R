@@ -1,7 +1,7 @@
 test_that("download waterbodies works", {
   data(locs)
 
-  path <- 'C:/Users/rmummah/OneDrive - DOI/Documents/GitHub/species-futures/data/USA/'
+  path <- '~/GitHub/species-futures/data/USA/'
 
   expect_true(file.exists(paste0(path,'NHDPlusNationalData/waterbody.rds')))
 
@@ -19,7 +19,7 @@ test_that("download waterbodies works", {
 test_that("check thresholds", {
   data(locs)
 
-  path <- 'C:/Users/rmummah/OneDrive - DOI/Documents/GitHub/species-futures/data/USA/'
+  path <- '~/GitHub/species-futures/data/USA/'
 
   expect_warning(get_waterbodies(locs[1:3,],
                                  path = path,
