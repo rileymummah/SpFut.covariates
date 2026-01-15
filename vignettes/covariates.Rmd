@@ -17,14 +17,6 @@ knitr::opts_chunk$set(
 ```
 
 
-We recommend installing the package using:
-
-```{r install, eval=F}
-devtools::install_github('rileymummah/SpFut.covariates', 
-                         build_vignettes = T, force = T)
-```
-
-
 # Setup
 First, let's load the library and the test data for the functions.
 
